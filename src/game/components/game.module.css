@@ -1,0 +1,1457 @@
+.gameShell {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
+  min-height: 620px;
+  overflow: hidden;
+  background: #050403;
+}
+
+.cutscene {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  overflow: hidden;
+  background: #030303;
+  color: var(--sepia-lite);
+  isolation: isolate;
+}
+
+.cutsceneFrame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  animation: cutsceneFade 900ms ease both;
+}
+
+.cutsceneFrame img {
+  object-fit: cover;
+  filter: brightness(0.75) contrast(1.08) saturate(0.8);
+  transform: scale(1.035);
+}
+
+.cutsceneFrame img[data-motion="push"] {
+  animation: cutscenePush 7s ease-out both;
+}
+
+.cutsceneFrame img[data-motion="pull"] {
+  animation: cutscenePull 7s ease-out both;
+}
+
+.cutsceneFrame img[data-motion="drift-left"] {
+  animation: cutsceneDriftLeft 7s ease-out both;
+}
+
+.cutsceneFrame img[data-motion="drift-right"] {
+  animation: cutsceneDriftRight 7s ease-out both;
+}
+
+.cutsceneRain,
+.cutsceneGrain,
+.cutsceneShade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cutsceneRain {
+  z-index: 2;
+  overflow: hidden;
+  opacity: 0.42;
+  transform: skewX(-8deg);
+}
+
+.cutsceneRain span {
+  position: absolute;
+  top: -150px;
+  display: block;
+  width: 1px;
+  background: linear-gradient(transparent, rgba(224, 231, 228, 0.68));
+  animation: cutsceneRainFall linear infinite;
+}
+
+.cutsceneGrain {
+  z-index: 3;
+  opacity: 0.15;
+  background-image:
+    repeating-radial-gradient(circle at 17% 32%, transparent 0 1px, rgba(255, 255, 255, 0.08) 1px 2px),
+    repeating-radial-gradient(circle at 74% 61%, transparent 0 2px, rgba(0, 0, 0, 0.2) 2px 3px);
+  background-size: 5px 5px, 7px 7px;
+  mix-blend-mode: soft-light;
+  animation: cutsceneGrainShift 280ms steps(2) infinite;
+}
+
+.cutsceneShade {
+  z-index: 4;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.83) 0%, rgba(0, 0, 0, 0.38) 42%, transparent 70%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.88) 0%, transparent 48%),
+    radial-gradient(circle at 50% 42%, transparent 38%, rgba(0, 0, 0, 0.56) 100%);
+}
+
+.cutsceneHeader,
+.cutsceneCaption,
+.cutsceneFooter {
+  position: absolute;
+  z-index: 5;
+}
+
+.cutsceneHeader {
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(20px, 3vw, 42px) clamp(20px, 4vw, 64px);
+}
+
+.cutsceneHeader > span {
+  color: var(--sepia);
+  font-size: clamp(0.66rem, 1vw, 0.82rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cutsceneHeader button,
+.cutsceneControls button {
+  border: 1px solid rgba(230, 215, 176, 0.28);
+  background: rgba(8, 7, 5, 0.42);
+  color: var(--sepia-lite);
+  cursor: pointer;
+  font: inherit;
+  padding: 10px 14px;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease;
+}
+
+.cutsceneHeader button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cutsceneHeader button:hover,
+.cutsceneHeader button:focus-visible,
+.cutsceneControls button:hover,
+.cutsceneControls button:focus-visible {
+  border-color: var(--sepia);
+  background: rgba(43, 34, 23, 0.82);
+  outline: none;
+}
+
+.cutsceneHeader kbd {
+  border: 1px solid rgba(230, 215, 176, 0.24);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.68rem;
+  padding: 2px 5px;
+}
+
+.cutsceneCaption {
+  left: clamp(20px, 6vw, 96px);
+  bottom: clamp(118px, 19vh, 190px);
+  width: min(720px, calc(100vw - 40px));
+  animation: cutsceneCaptionIn 850ms 180ms ease both;
+}
+
+.cutsceneCaption p {
+  color: var(--sepia);
+  font-size: clamp(0.68rem, 1vw, 0.86rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.cutsceneCaption h1 {
+  max-width: 680px;
+  margin-top: 12px;
+  font-family: var(--font-special-elite), monospace;
+  font-size: clamp(2rem, 4.7vw, 4.8rem);
+  font-weight: 400;
+  line-height: 0.98;
+  text-wrap: balance;
+  text-shadow: 0 4px 24px #000;
+}
+
+.cutsceneCaption > span {
+  display: block;
+  max-width: 640px;
+  margin-top: 18px;
+  border-left: 2px solid var(--sepia);
+  color: rgba(230, 215, 176, 0.88);
+  font-size: clamp(0.88rem, 1.25vw, 1.08rem);
+  line-height: 1.75;
+  padding-left: 16px;
+  text-shadow: 0 2px 12px #000;
+}
+
+.cutsceneFooter {
+  right: clamp(20px, 4vw, 64px);
+  bottom: clamp(20px, 4vw, 44px);
+  left: clamp(20px, 4vw, 64px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.cutsceneProgress {
+  display: flex;
+  width: min(440px, 42vw);
+  gap: 7px;
+}
+
+.cutsceneProgress button {
+  position: relative;
+  width: 100%;
+  height: 20px;
+  overflow: hidden;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.cutsceneProgress button::before,
+.cutsceneProgress button span {
+  position: absolute;
+  top: 9px;
+  right: 0;
+  left: 0;
+  height: 2px;
+  content: "";
+}
+
+.cutsceneProgress button::before {
+  background: rgba(230, 215, 176, 0.23);
+}
+
+.cutsceneProgress button span {
+  width: 0;
+  background: var(--sepia-lite);
+}
+
+.cutsceneProgress .cutsceneSeen span {
+  width: 100%;
+}
+
+.cutsceneProgress button[aria-current="step"] span {
+  width: 100%;
+  transform-origin: left;
+  animation: cutsceneProgress 6.8s linear both;
+}
+
+.cutsceneControls {
+  display: flex;
+  gap: 8px;
+}
+
+.cutsceneControls button:disabled {
+  cursor: default;
+  opacity: 0.3;
+}
+
+.cutsceneControls .cutscenePrimary {
+  border-color: rgba(201, 169, 106, 0.72);
+  background: rgba(79, 45, 28, 0.82);
+}
+
+@keyframes cutsceneFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cutscenePush {
+  from {
+    transform: scale(1.02);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes cutscenePull {
+  from {
+    transform: scale(1.11);
+  }
+  to {
+    transform: scale(1.025);
+  }
+}
+
+@keyframes cutsceneDriftLeft {
+  from {
+    transform: scale(1.08) translateX(1.2%);
+  }
+  to {
+    transform: scale(1.12) translateX(-1.2%);
+  }
+}
+
+@keyframes cutsceneDriftRight {
+  from {
+    transform: scale(1.1) translateX(-1.2%);
+  }
+  to {
+    transform: scale(1.06) translateX(1.2%);
+  }
+}
+
+@keyframes cutsceneRainFall {
+  from {
+    transform: translateY(-10vh);
+  }
+  to {
+    transform: translateY(125vh);
+  }
+}
+
+@keyframes cutsceneGrainShift {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-1px, 1px);
+  }
+  100% {
+    transform: translate(1px, -1px);
+  }
+}
+
+@keyframes cutsceneCaptionIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cutsceneProgress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.sceneLayer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(201, 169, 106, 0.08), transparent 42%),
+    #050403;
+}
+
+.sceneLayer::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 170px 64px rgba(0, 0, 0, 0.72),
+    inset 0 -170px 150px rgba(0, 0, 0, 0.64);
+}
+
+.sceneStage {
+  position: relative;
+  width: min(100vw, calc(100dvh * 16 / 9));
+  height: min(100dvh, calc(100vw * 9 / 16));
+  overflow: hidden;
+  background: #0d0a07;
+}
+
+.sceneStage img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sceneTitle {
+  position: fixed;
+  z-index: 10;
+  top: 22px;
+  left: 24px;
+  width: min(460px, calc(100vw - 48px));
+  pointer-events: none;
+}
+
+.sceneTitle span,
+.topHud span,
+.drawerHeader span,
+.discoveryNotice span,
+.caseStartOverlay p,
+.finalOverlay p {
+  display: block;
+  color: var(--sepia);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.sceneTitle h2,
+.topHud h1,
+.drawerHeader h2,
+.caseStartOverlay h1,
+.finalOverlay h2,
+.accusationCard h2,
+.dialogueBody h3,
+.mindSection h3,
+.nextSteps h3 {
+  font-family: var(--font-special-elite), monospace;
+  color: var(--sepia-lite);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.sceneTitle h2 {
+  margin-top: 6px;
+  font-size: clamp(1.4rem, 4vw, 2.5rem);
+  line-height: 1;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.9);
+}
+
+.narration {
+  position: fixed;
+  z-index: 12;
+  left: 24px;
+  bottom: 94px;
+  width: min(720px, calc(100vw - 48px));
+  max-height: 138px;
+  overflow: auto;
+  border-left: 3px solid var(--sepia);
+  background: linear-gradient(90deg, rgba(13, 10, 7, 0.88), rgba(13, 10, 7, 0.52));
+  color: var(--sepia-lite);
+  line-height: 1.65;
+  padding: 12px 14px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+  white-space: pre-line;
+}
+
+.hotspot {
+  position: absolute;
+  z-index: 8;
+  border: 0;
+  background: transparent;
+  cursor: crosshair;
+  opacity: 0;
+}
+
+.hotspot::after {
+  content: attr(title);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  min-width: max-content;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(230, 215, 176, 0.62);
+  background: rgba(13, 10, 7, 0.82);
+  color: var(--sepia-lite);
+  font-size: 0.72rem;
+  padding: 6px 8px;
+  text-shadow: 0 1px 2px #000;
+}
+
+.hotspot:hover,
+.hotspot:focus-visible {
+  opacity: 1;
+  outline: 1px solid rgba(230, 215, 176, 0.64);
+  outline-offset: 3px;
+  background: radial-gradient(circle, rgba(230, 215, 176, 0.16), transparent 60%);
+}
+
+.hotspotInspected:hover,
+.hotspotInspected:focus-visible {
+  outline-color: rgba(138, 154, 91, 0.9);
+}
+
+.hotspotAlwaysVisible {
+  cursor: pointer;
+  opacity: 0.82;
+}
+
+.hotspotAlwaysVisible::after {
+  border-color: rgba(230, 215, 176, 0.78);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.72);
+}
+
+.hotspotAlwaysVisible:hover,
+.hotspotAlwaysVisible:focus-visible {
+  opacity: 1;
+}
+
+.sceneCharacter {
+  position: absolute;
+  display: block;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  filter: drop-shadow(0 18px 16px rgba(0, 0, 0, 0.68));
+  padding: 0;
+  transform-origin: center bottom;
+  transition:
+    filter 160ms ease,
+    transform 160ms ease;
+}
+
+.sceneCharacter::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  bottom: 1.5%;
+  width: 42%;
+  height: 3.5%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.7);
+  filter: blur(4px);
+}
+
+.sceneCharacter[data-clipped="true"]::before {
+  display: none;
+}
+
+.sceneCharacter img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.sceneCharacter span {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 5%;
+  min-width: max-content;
+  transform: translateX(-50%);
+  border: 1px solid rgba(230, 215, 176, 0.68);
+  background: rgba(13, 10, 7, 0.88);
+  color: var(--sepia-lite);
+  font-size: clamp(0.58rem, 0.75vw, 0.76rem);
+  opacity: 0;
+  padding: 6px 8px;
+  pointer-events: none;
+  text-shadow: 0 1px 2px #000;
+  transition: opacity 160ms ease;
+}
+
+.sceneCharacter:hover,
+.sceneCharacter:focus-visible {
+  filter:
+    drop-shadow(0 18px 16px rgba(0, 0, 0, 0.7))
+    drop-shadow(0 0 9px rgba(230, 215, 176, 0.48));
+  outline: none;
+  transform: translateY(-1.5%) scale(1.035);
+}
+
+.sceneCharacter:hover span,
+.sceneCharacter:focus-visible span {
+  opacity: 1;
+}
+
+.sceneCharacterTalked span {
+  border-color: rgba(138, 154, 91, 0.9);
+}
+
+.characterFlipped {
+  transform: scaleX(-1);
+}
+
+.topHud {
+  position: fixed;
+  z-index: 20;
+  top: 18px;
+  right: 24px;
+  display: flex;
+  max-width: min(520px, calc(100vw - 48px));
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 16px;
+  text-align: right;
+  text-shadow: 0 3px 16px rgba(0, 0, 0, 0.9);
+}
+
+.topHud h1 {
+  margin-top: 4px;
+  font-size: 1.15rem;
+}
+
+.topHud p,
+.caseMeta,
+.statusLine,
+.emptyText,
+.responseText {
+  color: var(--dim);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.actionDock {
+  position: fixed;
+  z-index: 24;
+  right: 24px;
+  bottom: 24px;
+  left: 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.actionDock > * {
+  pointer-events: auto;
+}
+
+.button,
+.iconButton {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(201, 169, 106, 0.34);
+  background: rgba(33, 27, 20, 0.82);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  padding: 9px 12px;
+}
+
+.button:hover,
+.button:focus-visible,
+.iconButton:hover,
+.iconButton:focus-visible,
+.activeButton {
+  border-color: var(--sepia);
+  background: rgba(44, 36, 26, 0.96);
+  color: var(--sepia-lite);
+  outline: none;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.primary {
+  border-color: var(--danger);
+  background: var(--danger);
+  color: #fff;
+}
+
+.primarySoft {
+  border-color: rgba(181, 86, 63, 0.82);
+  background: rgba(100, 42, 29, 0.82);
+  color: #fff4df;
+}
+
+.caseMeta {
+  position: fixed;
+  z-index: 20;
+  left: 24px;
+  bottom: 24px;
+  display: flex;
+  max-width: min(520px, calc(100vw - 48px));
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.caseMeta button {
+  border: 0;
+  background: transparent;
+  color: var(--dim);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.76rem;
+  text-decoration: underline;
+}
+
+.successText {
+  color: var(--good);
+}
+
+.errorText {
+  color: var(--danger);
+}
+
+.noticeStack {
+  position: fixed;
+  z-index: 48;
+  top: 92px;
+  right: 24px;
+  display: grid;
+  width: min(390px, calc(100vw - 48px));
+  gap: 8px;
+}
+
+.discoveryNotice {
+  border: 1px solid rgba(201, 169, 106, 0.44);
+  background:
+    linear-gradient(90deg, rgba(33, 27, 20, 0.96), rgba(13, 10, 7, 0.9)),
+    var(--panel);
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.42);
+  padding: 10px 12px;
+}
+
+.discoveryNotice strong {
+  display: block;
+  color: var(--sepia-lite);
+  font-weight: 400;
+  line-height: 1.5;
+  margin-top: 4px;
+}
+
+.dialogueScene {
+  position: fixed;
+  z-index: 60;
+  inset: 0;
+  overflow: hidden;
+  background: #050403;
+  isolation: isolate;
+}
+
+.dialogueCamera,
+.dialogueSceneShade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.dialogueCamera {
+  z-index: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: brightness(0.54) contrast(1.08) saturate(0.72);
+  animation: dialogueCameraApproach 900ms cubic-bezier(0.2, 0.72, 0.2, 1) both;
+}
+
+.dialogueSceneShade {
+  z-index: 1;
+  background:
+    linear-gradient(0deg, rgba(4, 3, 2, 0.97) 0%, rgba(4, 3, 2, 0.66) 34%, transparent 67%),
+    radial-gradient(circle at 50% 31%, transparent 10%, rgba(0, 0, 0, 0.18) 38%, rgba(0, 0, 0, 0.76) 100%);
+  box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.72);
+}
+
+.dialogueClose {
+  position: absolute;
+  z-index: 5;
+  top: clamp(16px, 3vw, 34px);
+  right: clamp(16px, 3vw, 40px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(230, 215, 176, 0.34);
+  background: rgba(13, 10, 7, 0.72);
+  color: var(--sepia-lite);
+  cursor: pointer;
+  font: inherit;
+  padding: 10px 13px;
+}
+
+.dialogueClose:hover,
+.dialogueClose:focus-visible {
+  border-color: var(--sepia);
+  background: rgba(44, 36, 26, 0.92);
+  outline: none;
+}
+
+.dialogueClose kbd {
+  border: 1px solid rgba(230, 215, 176, 0.26);
+  color: var(--dim);
+  font: inherit;
+  font-size: 0.66rem;
+  padding: 2px 5px;
+}
+
+.dialoguePortrait {
+  position: absolute;
+  z-index: 2;
+  top: 3vh;
+  bottom: min(35vh, 320px);
+  left: 50%;
+  display: flex;
+  width: min(42vw, 500px);
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
+  transform: translateX(-50%);
+  filter:
+    drop-shadow(0 30px 28px rgba(0, 0, 0, 0.82))
+    drop-shadow(0 0 26px rgba(201, 169, 106, 0.12));
+  animation: dialoguePortraitApproach 780ms 80ms cubic-bezier(0.2, 0.72, 0.2, 1) both;
+}
+
+.dialoguePortrait img {
+  display: block;
+  width: clamp(260px, 24vw, 390px);
+  height: auto;
+  object-fit: contain;
+  transform-origin: center top;
+}
+
+.dialoguePortraitFlipped {
+  transform: scaleX(-1);
+}
+
+.dialogueConversation {
+  position: absolute;
+  z-index: 4;
+  right: 20px;
+  bottom: clamp(18px, 3vh, 32px);
+  left: 20px;
+  display: grid;
+  width: min(940px, calc(100vw - 40px));
+  margin: 0 auto;
+  gap: 9px;
+  animation: dialogueInterfaceIn 520ms 360ms ease both;
+}
+
+.dialogueSpeaker {
+  text-align: center;
+  text-shadow: 0 3px 16px #000;
+}
+
+.dialogueSpeaker span {
+  color: var(--sepia);
+  font-size: 0.68rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.dialogueSpeaker h2 {
+  margin-top: 3px;
+  font-family: var(--font-special-elite), monospace;
+  color: var(--sepia-lite);
+  font-size: clamp(1.45rem, 2.6vw, 2.25rem);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.typewriterBox {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-height: 86px;
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid rgba(201, 169, 106, 0.48);
+  border-left: 3px solid var(--sepia);
+  background:
+    linear-gradient(90deg, rgba(25, 19, 13, 0.96), rgba(9, 7, 5, 0.9)),
+    var(--panel);
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.54);
+  color: var(--sepia-lite);
+  cursor: text;
+  font: inherit;
+  line-height: 1.68;
+  padding: 15px 18px 19px;
+  text-align: left;
+  white-space: pre-line;
+}
+
+.typewriterBox:focus-visible {
+  border-color: var(--sepia-lite);
+  outline: none;
+}
+
+.typewriterBox small {
+  position: absolute;
+  right: 11px;
+  bottom: 5px;
+  color: var(--dim);
+  font-size: 0.58rem;
+}
+
+.typewriterCaret {
+  display: inline-block;
+  width: 0.58em;
+  height: 1.05em;
+  margin-left: 3px;
+  background: var(--sepia-lite);
+  vertical-align: -0.15em;
+  animation: typewriterBlink 720ms steps(1) infinite;
+}
+
+.cinematicDialogueOptions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.cinematicDialogueOption {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  border: 1px solid rgba(201, 169, 106, 0.3);
+  background: rgba(13, 10, 7, 0.84);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  line-height: 1.35;
+  padding: 9px 12px;
+  text-align: left;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.cinematicDialogueOption > span {
+  color: var(--sepia);
+  font-size: 0.65rem;
+}
+
+.cinematicDialogueOption:hover,
+.cinematicDialogueOption:focus-visible,
+.cinematicDialogueOptionActive {
+  border-color: var(--sepia);
+  background: rgba(54, 40, 26, 0.94);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.cinematicDialogueOption:disabled {
+  cursor: wait;
+  opacity: 0.46;
+  transform: none;
+}
+
+.dialogueOptionSeen {
+  border-color: rgba(138, 154, 91, 0.5);
+  color: var(--sepia-lite);
+}
+
+@keyframes dialogueCameraApproach {
+  from {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.34);
+  }
+}
+
+@keyframes dialoguePortraitApproach {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(7%) scale(0.74);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+@keyframes dialogueInterfaceIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes typewriterBlink {
+  0%,
+  48% {
+    opacity: 1;
+  }
+  49%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.drawerBackdrop,
+.accusationOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 44;
+  display: flex;
+  justify-content: flex-end;
+  background: rgba(5, 4, 3, 0.42);
+}
+
+.drawer {
+  width: min(540px, 100vw);
+  height: 100dvh;
+  overflow: auto;
+  border-left: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(33, 27, 20, 0.98), rgba(13, 10, 7, 0.98)),
+    var(--panel);
+  box-shadow: -24px 0 58px rgba(0, 0, 0, 0.48);
+  padding: 20px;
+}
+
+.dialogueDrawer,
+.mindDrawer {
+  width: min(860px, 100vw);
+}
+
+.locationsDrawer {
+  width: min(620px, 100vw);
+}
+
+.drawerHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.drawerHeader h2 {
+  margin-top: 4px;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.iconButton {
+  min-height: 36px;
+  padding: 7px 10px;
+}
+
+.tabs,
+.inlineActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.notebookSection,
+.locationList,
+.evidenceList {
+  display: grid;
+  gap: 8px;
+}
+
+.notebookSection {
+  margin-top: 12px;
+}
+
+.clueItem,
+.personItem,
+.contradictionItem,
+.mindSection,
+.nextSteps {
+  border: 1px solid rgba(201, 169, 106, 0.18);
+  background: rgba(13, 10, 7, 0.34);
+  line-height: 1.5;
+  padding: 11px;
+}
+
+.clueItem strong,
+.personItem strong,
+.locationButton strong {
+  display: block;
+  color: var(--sepia-lite);
+  font-family: var(--font-special-elite), monospace;
+  font-weight: 400;
+  margin-bottom: 5px;
+}
+
+.dialogueLayout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 14px;
+}
+
+.characterRail,
+.dialogueOptions {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.characterButton {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(201, 169, 106, 0.24);
+  background: rgba(13, 10, 7, 0.38);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  min-height: 82px;
+  padding: 8px;
+  text-align: left;
+}
+
+.characterButton img,
+.characterIntro img {
+  object-fit: cover;
+  border: 1px solid rgba(201, 169, 106, 0.24);
+  background: #0d0a07;
+}
+
+.characterButton span {
+  color: var(--sepia-lite);
+}
+
+.dialogueBody {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+}
+
+.characterIntro {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.characterIntro h3 {
+  font-size: 1.6rem;
+  margin-bottom: 4px;
+}
+
+.characterIntro p {
+  color: var(--dim);
+  line-height: 1.5;
+  margin-top: 6px;
+}
+
+.dialogueOption {
+  justify-content: flex-start;
+  min-height: 46px;
+  text-align: left;
+}
+
+.dialogueOptionSeen {
+  border-color: rgba(138, 154, 91, 0.5);
+  color: var(--sepia-lite);
+}
+
+.responseText {
+  border-left: 3px solid var(--sepia);
+  background: rgba(13, 10, 7, 0.4);
+  color: var(--text);
+  padding: 10px 12px;
+  white-space: pre-line;
+}
+
+.locationButton {
+  display: grid;
+  gap: 4px;
+  border: 1px solid rgba(201, 169, 106, 0.24);
+  background: rgba(13, 10, 7, 0.38);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  line-height: 1.5;
+  padding: 12px;
+  text-align: left;
+}
+
+.locationButton:hover,
+.locationButton:focus-visible,
+.activeLocationButton {
+  border-color: var(--sepia);
+  background: rgba(44, 36, 26, 0.78);
+  outline: none;
+}
+
+.locationButton small {
+  color: var(--sepia);
+}
+
+.mindGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.mindSection h3,
+.nextSteps h3 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.mindSection p,
+.nextSteps p {
+  color: var(--text);
+  line-height: 1.55;
+  margin-top: 7px;
+}
+
+.nextSteps {
+  margin-top: 10px;
+}
+
+.caseStartOverlay,
+.finalOverlay {
+  position: fixed;
+  z-index: 42;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  width: min(720px, calc(100vw - 36px));
+  gap: 16px;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(201, 169, 106, 0.42);
+  background: rgba(20, 15, 10, 0.9);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.58);
+  padding: 26px;
+}
+
+.caseStartOverlay h1,
+.finalOverlay h2 {
+  font-size: clamp(2rem, 7vw, 4rem);
+  line-height: 0.96;
+}
+
+.caseStartOverlay span,
+.finalOverlay span {
+  color: var(--text);
+  line-height: 1.75;
+  white-space: pre-line;
+}
+
+.finalOverlay {
+  z-index: 52;
+}
+
+.accusationOverlay {
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.accusationCard {
+  width: min(980px, calc(100vw - 40px));
+  max-height: calc(100dvh - 40px);
+  overflow: auto;
+  border: 1px solid rgba(201, 169, 106, 0.42);
+  background: rgba(20, 15, 10, 0.96);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.58);
+  padding: 18px;
+}
+
+.accusationCard h2 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.accusationGrid {
+  display: grid;
+  gap: 14px;
+}
+
+.evidenceButton {
+  justify-content: flex-start;
+  text-align: left;
+  width: 100%;
+}
+
+.selectedEvidence {
+  border-color: var(--good);
+  color: var(--sepia-lite);
+}
+
+@media (max-width: 900px) {
+  .gameShell {
+    min-height: 700px;
+  }
+
+  .dialogueClose {
+    top: 14px;
+    right: 14px;
+    font-size: 0.72rem;
+    padding: 8px 10px;
+  }
+
+  .dialogueClose kbd {
+    display: none;
+  }
+
+  .dialoguePortrait {
+    top: 56px;
+    bottom: 48vh;
+    width: min(90vw, 430px);
+  }
+
+  .dialoguePortrait img {
+    width: min(64vw, 310px);
+  }
+
+  .dialogueConversation {
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+    width: auto;
+    gap: 7px;
+  }
+
+  .dialogueSpeaker h2 {
+    font-size: 1.45rem;
+  }
+
+  .typewriterBox {
+    min-height: 96px;
+    max-height: 122px;
+    font-size: 0.78rem;
+    padding: 12px 13px 19px;
+  }
+
+  .cinematicDialogueOptions {
+    display: grid;
+    overflow-x: auto;
+    grid-auto-columns: minmax(235px, 82vw);
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    padding-bottom: 3px;
+    scroll-snap-type: x mandatory;
+  }
+
+  .cinematicDialogueOption {
+    min-height: 52px;
+    font-size: 0.74rem;
+    scroll-snap-align: start;
+  }
+
+  .cutsceneHeader {
+    padding: 18px 16px;
+  }
+
+  .cutsceneHeader > span {
+    max-width: 45%;
+  }
+
+  .cutsceneHeader kbd {
+    display: none;
+  }
+
+  .cutsceneCaption {
+    right: 16px;
+    bottom: 158px;
+    left: 16px;
+    width: auto;
+  }
+
+  .cutsceneCaption h1 {
+    font-size: clamp(1.8rem, 8.5vw, 3rem);
+  }
+
+  .cutsceneCaption > span {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 0.86rem;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+  }
+
+  .cutsceneFooter {
+    right: 16px;
+    bottom: 20px;
+    left: 16px;
+    display: grid;
+    gap: 10px;
+  }
+
+  .cutsceneProgress {
+    width: 100%;
+  }
+
+  .cutsceneControls {
+    justify-content: flex-end;
+  }
+
+  .topHud {
+    right: 16px;
+    left: 16px;
+    justify-content: space-between;
+    text-align: left;
+  }
+
+  .sceneTitle {
+    top: 88px;
+    left: 16px;
+    width: calc(100vw - 32px);
+  }
+
+  .narration {
+    left: 16px;
+    right: 16px;
+    bottom: 142px;
+    width: auto;
+    max-height: 130px;
+  }
+
+  .actionDock {
+    right: 16px;
+    bottom: 44px;
+    left: 16px;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .caseMeta {
+    left: 16px;
+    bottom: 10px;
+  }
+
+  .button {
+    min-width: max-content;
+  }
+
+  .dialogueLayout,
+  .mindGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .characterRail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .characterButton {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cutsceneFrame,
+  .cutsceneFrame img,
+  .cutsceneCaption,
+  .cutsceneProgress button[aria-current="step"] span,
+  .dialogueCamera,
+  .dialoguePortrait,
+  .dialogueConversation,
+  .typewriterCaret {
+    animation-duration: 1ms;
+  }
+
+  .cutsceneRain,
+  .cutsceneGrain {
+    display: none;
+  }
+}

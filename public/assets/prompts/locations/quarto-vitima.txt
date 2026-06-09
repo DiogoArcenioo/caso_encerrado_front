@@ -1,0 +1,19 @@
+Imagem final para: Quarto da vítima.
+
+Cena:
+Quarto pequeno e bagunçado de um homem que planejava fugir. Cama desarrumada, mala parcialmente arrumada aberta sobre uma cadeira ou no chão, roupas dobradas pela metade, gaveta aberta, bilhete rasgado em uma superfície e fotografia antiga escondida parcialmente sob papéis. Luz amarelada de abajur e sombras de persiana.
+
+Composição para hotspots:
+- Mala aberta bem visível na parte inferior esquerda ou central.
+- Bilhete rasgado em cima de mesa ou criado-mudo, destacado por luz.
+- Fotografia escondida parcialmente visível perto da cama ou gaveta.
+- Atmosfera de pressa, sem personagem em foco.
+
+
+Estilo visual obrigatório:
+- noir detective game background, 1940s/1950s, rainy night, cinematic lighting, strong shadows, vintage crime scene, semi-realistic painted style, 16:9, high detail, muted colors, dark atmosphere.
+- Paleta escura com marrom, preto, cinza molhado, sépia, amarelo gasto de lâmpada antiga e pequenos acentos de vermelho ou azul quando fizer sentido.
+- Pintura semi-realista para visual novel investigativa, sem aparência cartunesca.
+- Sem texto legível, sem letreiros legíveis, sem marcas d'água, sem UI, sem personagens principais em primeiro plano, sem gore.
+- Composição precisa funcionar como imagem de fundo para hotspots clicáveis. Deixe os objetos importantes bem visíveis e separados.
+- Enquadramento 16:9, câmera fixa, perspectiva levemente cinematográfica, com profundidade e sombras fortes.

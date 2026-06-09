@@ -1,0 +1,19 @@
+Imagem final para: Escada de incêndio enferrujada.
+
+Cena:
+Escada de incêndio externa, velha e enferrujada, presa à lateral do prédio em noite de chuva. Metal escuro molhado, grades antigas, cidade desfocada ao fundo, luzes de janela e vapor. A cena deve sugerir que a fuga pela escada foi encenada. Degraus com ferrugem intacta e pouca lama artificial em pontos convenientes.
+
+Composição para hotspots:
+- Degraus enferrujados bem visíveis no centro.
+- Lama artificial em um ponto do piso ou degrau inferior.
+- Grade lateral com um botão preso visível em um ponto isolado.
+- Profundidade vertical da escada, mas sem poluir os objetos clicáveis.
+
+
+Estilo visual obrigatório:
+- noir detective game background, 1940s/1950s, rainy night, cinematic lighting, strong shadows, vintage crime scene, semi-realistic painted style, 16:9, high detail, muted colors, dark atmosphere.
+- Paleta escura com marrom, preto, cinza molhado, sépia, amarelo gasto de lâmpada antiga e pequenos acentos de vermelho ou azul quando fizer sentido.
+- Pintura semi-realista para visual novel investigativa, sem aparência cartunesca.
+- Sem texto legível, sem letreiros legíveis, sem marcas d'água, sem UI, sem personagens principais em primeiro plano, sem gore.
+- Composição precisa funcionar como imagem de fundo para hotspots clicáveis. Deixe os objetos importantes bem visíveis e separados.
+- Enquadramento 16:9, câmera fixa, perspectiva levemente cinematográfica, com profundidade e sombras fortes.

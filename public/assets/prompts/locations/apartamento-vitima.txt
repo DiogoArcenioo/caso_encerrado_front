@@ -1,0 +1,19 @@
+Imagem final para: Entrada do apartamento da vítima.
+
+Cena:
+Entrada de um apartamento antigo, sombrio e parcialmente iluminado pela luz do corredor. Porta de madeira pesada, fechadura antiga, paredes manchadas, cabideiro com casaco escuro, sapatos da vítima próximos à entrada e sombras projetadas pela chuva da janela de outro cômodo. Deve parecer que alguém entrou e saiu com calma.
+
+Composição para hotspots:
+- Porta e fechadura visíveis no centro ou centro esquerdo.
+- Sapatos limpos da vítima no chão, separados e fáceis de notar.
+- Caminho visual levando para a sala da vítima.
+- Sem corpo explícito, sem gore.
+
+
+Estilo visual obrigatório:
+- noir detective game background, 1940s/1950s, rainy night, cinematic lighting, strong shadows, vintage crime scene, semi-realistic painted style, 16:9, high detail, muted colors, dark atmosphere.
+- Paleta escura com marrom, preto, cinza molhado, sépia, amarelo gasto de lâmpada antiga e pequenos acentos de vermelho ou azul quando fizer sentido.
+- Pintura semi-realista para visual novel investigativa, sem aparência cartunesca.
+- Sem texto legível, sem letreiros legíveis, sem marcas d'água, sem UI, sem personagens principais em primeiro plano, sem gore.
+- Composição precisa funcionar como imagem de fundo para hotspots clicáveis. Deixe os objetos importantes bem visíveis e separados.
+- Enquadramento 16:9, câmera fixa, perspectiva levemente cinematográfica, com profundidade e sombras fortes.

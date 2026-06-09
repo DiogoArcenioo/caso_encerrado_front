@@ -1,13 +1,14 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --bg: #15110d;
+  --panel: #211b14;
+  --panel-strong: #2c241a;
+  --line: #4a3e2c;
+  --sepia: #c9a96a;
+  --sepia-lite: #e6d7b0;
+  --text: #cfc3a8;
+  --dim: #8a7c60;
+  --danger: #b5563f;
+  --good: #8a9a5b;
 }
 
 html {
@@ -24,9 +25,11 @@ body {
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at center, #221a12 0%, #100c08 100%),
+    var(--bg);
+  font-family: var(--font-cutive-mono), monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -42,8 +45,11 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+button {
+  font: inherit;
+}
+
+::selection {
+  background: rgba(201, 169, 106, 0.3);
+  color: var(--sepia-lite);
 }

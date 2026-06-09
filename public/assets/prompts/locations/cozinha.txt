@@ -1,0 +1,19 @@
+Imagem final para: Cozinha pequena da vítima.
+
+Cena:
+Cozinha estreita e antiga, azulejos manchados, pia de metal, armário velho, luz fria misturada com lâmpada amarelada. Sobre a mesa ou balcão há uma xícara de café com borra grossa. Perto da pia, um pano úmido usado para limpar algo, com aparência suspeita. A cozinha deve parecer limpa às pressas, não naturalmente limpa.
+
+Composição para hotspots:
+- Xícara de café com borra bem visível no primeiro plano ou centro.
+- Pano úmido perto da pia, separado da xícara.
+- Pia e bancada no lado direito ou fundo.
+- Superfícies escuras com reflexos discretos.
+
+
+Estilo visual obrigatório:
+- noir detective game background, 1940s/1950s, rainy night, cinematic lighting, strong shadows, vintage crime scene, semi-realistic painted style, 16:9, high detail, muted colors, dark atmosphere.
+- Paleta escura com marrom, preto, cinza molhado, sépia, amarelo gasto de lâmpada antiga e pequenos acentos de vermelho ou azul quando fizer sentido.
+- Pintura semi-realista para visual novel investigativa, sem aparência cartunesca.
+- Sem texto legível, sem letreiros legíveis, sem marcas d'água, sem UI, sem personagens principais em primeiro plano, sem gore.
+- Composição precisa funcionar como imagem de fundo para hotspots clicáveis. Deixe os objetos importantes bem visíveis e separados.
+- Enquadramento 16:9, câmera fixa, perspectiva levemente cinematográfica, com profundidade e sombras fortes.

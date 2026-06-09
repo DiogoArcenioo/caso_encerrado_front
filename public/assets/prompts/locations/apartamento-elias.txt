@@ -1,0 +1,20 @@
+Imagem final para: Apartamento de Elias com bancada de relojoeiro.
+
+Cena:
+Apartamento silencioso de um relojoeiro melancólico. Bancada de trabalho com ferramentas pequenas, relógios desmontados, lupas, engrenagens, caixas de madeira, xícara de café forte com borra, paredes cobertas por relógios antigos. A atmosfera deve ser calma, precisa e inquietante, como se o tempo fosse uma obsessão.
+
+Composição para hotspots:
+- Bancada de relojoeiro em destaque no centro.
+- Relógios na parede, alguns parados, alguns abertos.
+- Xícara de café com borra em canto visível.
+- Ferramentas finas separadas para leitura visual.
+- Sem personagem em primeiro plano.
+
+
+Estilo visual obrigatório:
+- noir detective game background, 1940s/1950s, rainy night, cinematic lighting, strong shadows, vintage crime scene, semi-realistic painted style, 16:9, high detail, muted colors, dark atmosphere.
+- Paleta escura com marrom, preto, cinza molhado, sépia, amarelo gasto de lâmpada antiga e pequenos acentos de vermelho ou azul quando fizer sentido.
+- Pintura semi-realista para visual novel investigativa, sem aparência cartunesca.
+- Sem texto legível, sem letreiros legíveis, sem marcas d'água, sem UI, sem personagens principais em primeiro plano, sem gore.
+- Composição precisa funcionar como imagem de fundo para hotspots clicáveis. Deixe os objetos importantes bem visíveis e separados.
+- Enquadramento 16:9, câmera fixa, perspectiva levemente cinematográfica, com profundidade e sombras fortes.

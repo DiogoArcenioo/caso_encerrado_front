@@ -1,0 +1,19 @@
+Imagem final para: Corredor velho do terceiro andar.
+
+Cena:
+Corredor estreito e decadente no terceiro andar de um prédio antigo. Papel de parede descascado, portas de madeira envelhecida, lâmpada fraca no teto, piso gasto, sombras compridas e atmosfera abafada. A porta do apartamento da vítima deve parecer importante. O corredor tem sensação de silêncio depois de uma discussão.
+
+Composição para hotspots:
+- Porta do apartamento em destaque no lado direito ou centro direito.
+- Tapete pequeno diante da porta, visível no chão para a pista da chave reserva.
+- Fechadura visível o bastante para investigação.
+- Pequena mancha discreta no piso perto da porta para perfume no corredor.
+
+
+Estilo visual obrigatório:
+- noir detective game background, 1940s/1950s, rainy night, cinematic lighting, strong shadows, vintage crime scene, semi-realistic painted style, 16:9, high detail, muted colors, dark atmosphere.
+- Paleta escura com marrom, preto, cinza molhado, sépia, amarelo gasto de lâmpada antiga e pequenos acentos de vermelho ou azul quando fizer sentido.
+- Pintura semi-realista para visual novel investigativa, sem aparência cartunesca.
+- Sem texto legível, sem letreiros legíveis, sem marcas d'água, sem UI, sem personagens principais em primeiro plano, sem gore.
+- Composição precisa funcionar como imagem de fundo para hotspots clicáveis. Deixe os objetos importantes bem visíveis e separados.
+- Enquadramento 16:9, câmera fixa, perspectiva levemente cinematográfica, com profundidade e sombras fortes.

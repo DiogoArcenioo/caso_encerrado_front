@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-label="Recepcao do predio">
+  <defs>
+    <linearGradient id="wall" x1="0" x2="1">
+      <stop offset="0" stop-color="#0c0907"/>
+      <stop offset=".55" stop-color="#21170f"/>
+      <stop offset="1" stop-color="#0f0b08"/>
+    </linearGradient>
+    <radialGradient id="lamp" cx=".66" cy=".24" r=".55">
+      <stop offset="0" stop-color="#d7b56e" stop-opacity=".45"/>
+      <stop offset=".38" stop-color="#5b3d1e" stop-opacity=".25"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#wall)"/>
+  <rect width="1280" height="720" fill="url(#lamp)"/>
+  <path d="M0 565h1280v155H0z" fill="#120d09"/>
+  <path d="M90 110h350v350H90z" fill="#090706" stroke="#4a3e2c" stroke-width="4"/>
+  <path d="M780 90h320v420H780z" fill="#100b08" stroke="#4a3e2c" stroke-width="4"/>
+  <path d="M810 120h260v360H810z" fill="#19110b" stroke="#2f261a" stroke-width="2"/>
+  <circle cx="690" cy="145" r="70" fill="#c9a96a" opacity=".12"/>
+  <path d="M680 150l-90 300h190z" fill="#c9a96a" opacity=".08"/>
+  <g opacity=".16" stroke="#e6d7b0">
+    <path d="M120 0v720M320 0v720M540 0v720M760 0v720M980 0v720M1180 0v720"/>
+    <path d="M0 140h1280M0 330h1280M0 560h1280"/>
+  </g>
+  
+        <rect x="90" y="260" width="150" height="58" fill="rgba(201,169,106,.1)" stroke="#c9a96a" stroke-dasharray="5 6"/>
+        <text x="165" y="295" text-anchor="middle" fill="#e6d7b0" font-family="monospace" font-size="18">balcao</text>
+        <rect x="300" y="405" width="150" height="58" fill="rgba(201,169,106,.1)" stroke="#c9a96a" stroke-dasharray="5 6"/>
+        <text x="375" y="440" text-anchor="middle" fill="#e6d7b0" font-family="monospace" font-size="18">chaves</text>
+        <rect x="510" y="260" width="150" height="58" fill="rgba(201,169,106,.1)" stroke="#c9a96a" stroke-dasharray="5 6"/>
+        <text x="585" y="295" text-anchor="middle" fill="#e6d7b0" font-family="monospace" font-size="18">luminaria</text>
+  <rect x="42" y="42" width="520" height="62" fill="#15110d" stroke="#4a3e2c"/>
+  <text x="62" y="82" fill="#e6d7b0" font-family="monospace" font-size="26">Recepcao do predio</text>
+  <text x="62" y="682" fill="#8a7c60" font-family="monospace" font-size="18">placeholder noir - substitua mantendo o mesmo arquivo para preservar os hotspots</text>
+</svg>

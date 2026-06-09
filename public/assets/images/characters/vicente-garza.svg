@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-label="Vicente Mao Fria Garza">
+  <rect width="800" height="1000" fill="#100c08"/>
+  <radialGradient id="g" cx=".5" cy=".24" r=".58">
+    <stop offset="0" stop-color="#c9a96a" stop-opacity=".38"/>
+    <stop offset="1" stop-color="#000" stop-opacity="0"/>
+  </radialGradient>
+  <rect width="800" height="1000" fill="url(#g)"/>
+  <ellipse cx="400" cy="275" rx="128" ry="145" fill="#2c241a" stroke="#4a3e2c" stroke-width="8"/>
+  <path d="M250 530c35-90 260-90 300 0l60 330H190z" fill="#211b14" stroke="#4a3e2c" stroke-width="8"/>
+  <path d="M285 220c35-120 260-120 310 0H285z" fill="#0b0806"/>
+  <rect x="140" y="80" width="520" height="76" fill="#15110d" stroke="#4a3e2c"/>
+  <text x="400" y="128" text-anchor="middle" fill="#e6d7b0" font-family="monospace" font-size="34">Vicente Mao Fria Garza</text>
+  <text x="400" y="925" text-anchor="middle" fill="#8a7c60" font-family="monospace" font-size="26">capanga ligado as apostas</text>
+</svg>

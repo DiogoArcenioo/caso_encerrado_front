@@ -98,10 +98,6 @@ export function DialoguePanel({
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        onClose();
-      }
-
       if (event.key === "Enter" && displayedText !== spokenText) {
         event.preventDefault();
         completeSpokenText();
@@ -110,7 +106,7 @@ export function DialoguePanel({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [completeSpokenText, displayedText, onClose, spokenText]);
+  }, [completeSpokenText, displayedText, spokenText]);
 
   if (
     !character ||
@@ -166,7 +162,6 @@ export function DialoguePanel({
         onClick={onClose}
       >
         Encerrar conversa
-        <kbd>Esc</kbd>
       </button>
 
       <div className={styles.dialoguePortrait} aria-hidden="true">

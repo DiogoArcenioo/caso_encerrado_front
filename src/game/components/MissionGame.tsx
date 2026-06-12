@@ -28,6 +28,7 @@ import { DetectiveNotebook } from "./DetectiveNotebook";
 import { DialoguePanel } from "./DialoguePanel";
 import { LocationMap } from "./LocationMap";
 import { OpeningCutscene } from "./OpeningCutscene";
+import { PauseMenu } from "./PauseMenu";
 import { SceneView } from "./SceneView";
 import { TravelPanel } from "./TravelPanel";
 import styles from "./game.module.css";
@@ -52,10 +53,29 @@ export function MissionGame({ startMode }: { startMode: "new" | "load" }) {
   const [selectedCharacterId, setSelectedCharacterId] = useState("");
   const [locationsOpen, setLocationsOpen] = useState(false);
   const [mindOpen, setMindOpen] = useState(false);
+  const [pauseMenuOpen, setPauseMenuOpen] = useState(false);
   const [openingVisible, setOpeningVisible] = useState(startMode === "new");
   const [travelDestinationIds, setTravelDestinationIds] = useState<string[]>(
     [],
   );
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (
+        event.key !== "Escape" ||
+        event.repeat ||
+        openingVisible
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+      setPauseMenuOpen((open) => !open);
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [openingVisible]);
 
   useEffect(() => {
     if (startMode === "new") {
@@ -188,6 +208,7 @@ export function MissionGame({ startMode }: { startMode: "new" | "load" }) {
   }
 
   function handleReset() {
+    setPauseMenuOpen(false);
     setDialogueOpen(false);
     setSelectedCharacterId("");
     setNotebookOpen(false);
@@ -251,6 +272,14 @@ export function MissionGame({ startMode }: { startMode: "new" | "load" }) {
       </header>
 
       <nav className={styles.actionDock} aria-label="Ações do caso">
+        <button
+          className={`${styles.button} ${styles.pauseMenuTrigger}`}
+          type="button"
+          onClick={() => setPauseMenuOpen(true)}
+        >
+          Menu
+          <kbd>Esc</kbd>
+        </button>
         <button
           className={styles.button}
           type="button"
@@ -384,6 +413,14 @@ export function MissionGame({ startMode }: { startMode: "new" | "load" }) {
           onClose={() => setMindOpen(false)}
         />
       ) : null}
+
+      <PauseMenu
+        locationName={location.name}
+        open={pauseMenuOpen}
+        saveStatus={saveStatus}
+        onClose={() => setPauseMenuOpen(false)}
+        onSave={handleSave}
+      />
     </div>
   );
 }

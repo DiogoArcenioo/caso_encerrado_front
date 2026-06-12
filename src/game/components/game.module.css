@@ -881,6 +881,20 @@
   color: #fff4df;
 }
 
+.pauseMenuTrigger {
+  gap: 10px;
+}
+
+.pauseMenuTrigger kbd,
+.pauseMenuHint kbd {
+  border: 1px solid rgba(230, 215, 176, 0.3);
+  background: rgba(0, 0, 0, 0.24);
+  color: var(--sepia-lite);
+  font: inherit;
+  font-size: 0.68rem;
+  padding: 2px 6px;
+}
+
 .caseMeta {
   position: fixed;
   z-index: 20;
@@ -1350,6 +1364,109 @@
   background: rgba(5, 4, 3, 0.5);
   backdrop-filter: blur(3px);
   animation: backdropFadeIn 280ms ease both;
+}
+
+.pauseMenuBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(52, 38, 24, 0.18), transparent 42%),
+    rgba(2, 2, 2, 0.82);
+  padding: 20px;
+  backdrop-filter: blur(9px) saturate(0.7);
+  animation: backdropFadeIn 220ms ease both;
+}
+
+.pauseMenuCard {
+  display: grid;
+  width: min(480px, calc(100vw - 32px));
+  gap: 13px;
+  border: 1px solid rgba(201, 169, 106, 0.46);
+  border-top: 3px solid var(--sepia);
+  background:
+    linear-gradient(145deg, rgba(39, 30, 20, 0.98), rgba(13, 10, 7, 0.98)),
+    var(--panel);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.72);
+  padding: clamp(22px, 5vw, 34px);
+  animation: pauseMenuIn 320ms cubic-bezier(0.22, 0.75, 0.25, 1) both;
+}
+
+@keyframes pauseMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.pauseMenuEyebrow {
+  color: var(--sepia);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pauseMenuCard h2 {
+  color: var(--sepia-lite);
+  font-family: var(--font-special-elite), monospace;
+  font-size: clamp(2rem, 8vw, 3.5rem);
+  font-weight: 400;
+  line-height: 0.95;
+}
+
+.pauseMenuLocation {
+  color: var(--sepia);
+  font-family: var(--font-special-elite), monospace;
+}
+
+.pauseMenuDescription {
+  color: var(--dim);
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+.pauseMenuActions {
+  display: grid;
+  gap: 9px;
+  margin-top: 5px;
+}
+
+.pauseMenuActions .button {
+  width: 100%;
+  min-height: 48px;
+  text-decoration: none;
+}
+
+.pauseMenuExit {
+  border-color: rgba(181, 86, 63, 0.62);
+  color: #f0c4b9;
+}
+
+.pauseMenuStatus,
+.pauseMenuError {
+  border-left: 2px solid var(--good);
+  color: var(--good);
+  font-size: 0.76rem;
+  line-height: 1.5;
+  padding-left: 10px;
+}
+
+.pauseMenuError {
+  border-left-color: var(--danger);
+  color: #e9a08e;
+}
+
+.pauseMenuHint {
+  color: var(--dim);
+  font-size: 0.7rem;
+  text-align: center;
 }
 
 @keyframes backdropFadeIn {
@@ -2013,6 +2130,8 @@
   .discoveryNotice,
   .drawer,
   .drawerBackdrop,
+  .pauseMenuBackdrop,
+  .pauseMenuCard,
   .accusationOverlay,
   .accusationCard,
   .caseStartOverlay,

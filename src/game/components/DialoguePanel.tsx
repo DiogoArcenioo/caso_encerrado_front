@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { canShowDialogue } from "../systems/progression";
 import { CaseData, Character, DialogueOption, GameState } from "../types";
 import styles from "./game.module.css";
@@ -36,6 +36,16 @@ export function DialoguePanel({
   const [spokenText, setSpokenText] = useState(greeting);
   const [displayedText, setDisplayedText] = useState("");
   const [activeOptionId, setActiveOptionId] = useState("");
+  const typewriterTimerRef = useRef<number | null>(null);
+
+  const completeSpokenText = useCallback(() => {
+    if (typewriterTimerRef.current !== null) {
+      window.clearTimeout(typewriterTimerRef.current);
+      typewriterTimerRef.current = null;
+    }
+
+    setDisplayedText(spokenText);
+  }, [spokenText]);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -43,18 +53,27 @@ export function DialoguePanel({
     ).matches;
 
     if (prefersReducedMotion) {
-      const timer = window.setTimeout(() => setDisplayedText(spokenText), 0);
-      return () => window.clearTimeout(timer);
+      typewriterTimerRef.current = window.setTimeout(() => {
+        setDisplayedText(spokenText);
+        typewriterTimerRef.current = null;
+      }, 0);
+
+      return () => {
+        if (typewriterTimerRef.current !== null) {
+          window.clearTimeout(typewriterTimerRef.current);
+          typewriterTimerRef.current = null;
+        }
+      };
     }
 
     let index = 0;
-    let timer = 0;
 
     function typeNextCharacter() {
       index += 1;
       setDisplayedText(spokenText.slice(0, index));
 
       if (index >= spokenText.length) {
+        typewriterTimerRef.current = null;
         return;
       }
 
@@ -64,12 +83,17 @@ export function DialoguePanel({
         : /[,;:]/.test(characterJustTyped)
           ? 65
           : 19;
-      timer = window.setTimeout(typeNextCharacter, delay);
+      typewriterTimerRef.current = window.setTimeout(typeNextCharacter, delay);
     }
 
-    timer = window.setTimeout(typeNextCharacter, 260);
+    typewriterTimerRef.current = window.setTimeout(typeNextCharacter, 260);
 
-    return () => window.clearTimeout(timer);
+    return () => {
+      if (typewriterTimerRef.current !== null) {
+        window.clearTimeout(typewriterTimerRef.current);
+        typewriterTimerRef.current = null;
+      }
+    };
   }, [spokenText]);
 
   useEffect(() => {
@@ -79,13 +103,14 @@ export function DialoguePanel({
       }
 
       if (event.key === "Enter" && displayedText !== spokenText) {
-        setDisplayedText(spokenText);
+        event.preventDefault();
+        completeSpokenText();
       }
     }
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [displayedText, onClose, spokenText]);
+  }, [completeSpokenText, displayedText, onClose, spokenText]);
 
   if (
     !character ||
@@ -113,15 +138,27 @@ export function DialoguePanel({
       aria-label={`Conversa com ${character.name}`}
     >
       <div
-        className={styles.dialogueCamera}
-        style={{
-          backgroundImage: `url("${location.image}")`,
-          backgroundPosition: `${focusX}% ${focusY}%`,
-          transformOrigin: `${focusX}% ${focusY}%`,
-        }}
+        className={styles.dialogueCameraRig}
+        style={{ transformOrigin: `${focusX}% ${focusY}%` }}
+        aria-hidden="true"
+      >
+        <div
+          className={styles.dialogueCamera}
+          style={{
+            backgroundImage: `url("${location.image}")`,
+            backgroundPosition: `${focusX}% ${focusY}%`,
+            transformOrigin: `${focusX}% ${focusY}%`,
+          }}
+        />
+      </div>
+      <div className={styles.dialogueSceneShade} aria-hidden="true" />
+      <div className={styles.dialogueKeyLight} aria-hidden="true" />
+      <div className={styles.dialogueLetterbox} data-edge="top" aria-hidden="true" />
+      <div
+        className={styles.dialogueLetterbox}
+        data-edge="bottom"
         aria-hidden="true"
       />
-      <div className={styles.dialogueSceneShade} aria-hidden="true" />
 
       <button
         className={styles.dialogueClose}
@@ -154,7 +191,7 @@ export function DialoguePanel({
           className={styles.typewriterBox}
           type="button"
           aria-label={spokenText}
-          onClick={() => setDisplayedText(spokenText)}
+          onClick={completeSpokenText}
         >
           <span aria-hidden="true">
             {displayedText}
@@ -164,27 +201,39 @@ export function DialoguePanel({
         </button>
 
         <div className={styles.cinematicDialogueOptions}>
-          {options.map((option, index) => (
-            <button
-              className={`${styles.cinematicDialogueOption} ${
-                state.dialogueFlags.includes(option.id)
-                  ? styles.dialogueOptionSeen
-                  : ""
-              } ${
-                activeOptionId === option.id
-                  ? styles.cinematicDialogueOptionActive
-                  : ""
-              }`}
-              disabled={isTyping}
-              key={option.id}
-              type="button"
-              onClick={() => handleChoose(option)}
-            >
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              {option.text}
-            </button>
-          ))}
+          {options.map((option, index) => {
+            const asked = state.dialogueFlags.includes(option.id);
+            const isActive = activeOptionId === option.id;
+
+            return (
+              <button
+                className={`${styles.cinematicDialogueOption} ${
+                  asked && !isActive ? styles.dialogueOptionAsked : ""
+                } ${isActive ? styles.cinematicDialogueOptionActive : ""}`}
+                disabled={isTyping || asked}
+                key={option.id}
+                style={{ animationDelay: `${480 + index * 90}ms` }}
+                type="button"
+                onClick={() => handleChoose(option)}
+              >
+                <span aria-hidden="true">
+                  {asked ? "✓" : String(index + 1).padStart(2, "0")}
+                </span>
+                {option.text}
+                {asked ? <small>Já conversado</small> : null}
+              </button>
+            );
+          })}
         </div>
+
+        {!isTyping &&
+        options.every((option) => state.dialogueFlags.includes(option.id)) ? (
+          <p className={styles.dialogueExhausted}>
+            {character.dialogues.length > options.length
+              ? "Esta pessoa ainda esconde algo. Encontre novas pistas ou ouça outros relatos para desbloquear novas perguntas."
+              : "Você esgotou o assunto com esta pessoa por enquanto."}
+          </p>
+        ) : null}
       </article>
     </section>
   );

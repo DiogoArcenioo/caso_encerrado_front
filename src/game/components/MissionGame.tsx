@@ -4,19 +4,25 @@ import { useEffect, useState } from "react";
 import { case01 } from "../data/case01";
 import {
   accuse,
+  cancelAccusation,
   chooseDialogue,
   createInitialState,
   inspectHotspot,
+  openAccusation,
   startInvestigation,
-  toggleEvidence,
-  unlockAccusation,
   visitLocation,
 } from "../systems/progression";
 import { getCluePresentation } from "../systems/cluePresentation";
 import { loadRemoteSave, saveProgress } from "../systems/saveApi";
 import { migrateCaseKnowledge } from "../systems/stateMigration";
 import { useStoredUser } from "../systems/userStore";
-import { CaseData, DialogueOption, GameState, Hotspot } from "../types";
+import {
+  CaseData,
+  CaseScore,
+  DialogueOption,
+  GameState,
+  Hotspot,
+} from "../types";
 import { AccusationScreen } from "./AccusationScreen";
 import { DetectiveNotebook } from "./DetectiveNotebook";
 import { DialoguePanel } from "./DialoguePanel";
@@ -206,7 +212,7 @@ export function MissionGame({ startMode }: { startMode: "new" | "load" }) {
             className={`${styles.button} ${styles.primary}`}
             type="button"
             onClick={() => {
-              commit(startInvestigation(state, case01));
+              commit(startInvestigation(state));
               setDialogueOpen(false);
             }}
           >
@@ -223,7 +229,7 @@ export function MissionGame({ startMode }: { startMode: "new" | "load" }) {
         <OpeningCutscene
           onComplete={() => {
             setOpeningVisible(false);
-            commit(startInvestigation(state, case01));
+            commit(startInvestigation(state));
             setDialogueOpen(false);
           }}
         />
@@ -272,9 +278,9 @@ export function MissionGame({ startMode }: { startMode: "new" | "load" }) {
         <button
           className={styles.button}
           type="button"
-          onClick={() => commit(unlockAccusation(state, case01))}
+          onClick={() => commit(openAccusation(state))}
         >
-          Acusar
+          Encerrar caso
         </button>
       </nav>
 
@@ -308,6 +314,9 @@ export function MissionGame({ startMode }: { startMode: "new" | "load" }) {
           <p>{state.finalResult.type}</p>
           <h2>{state.finalResult.title}</h2>
           <span>{state.finalResult.text}</span>
+          {state.finalResult.score ? (
+            <ScoreReport score={state.finalResult.score} />
+          ) : null}
           <div className={styles.inlineActions}>
             <button className={styles.button} type="button" onClick={handleSave}>
               Salvar final
@@ -327,9 +336,8 @@ export function MissionGame({ startMode }: { startMode: "new" | "load" }) {
         <div className={styles.accusationOverlay}>
           <AccusationScreen
             caseData={case01}
-            state={state}
-            onToggleEvidence={(clueId) => commit(toggleEvidence(state, clueId))}
             onAccuse={(suspectId) => commit(accuse(state, suspectId, case01))}
+            onCancel={() => commit(cancelAccusation(state))}
           />
         </div>
       ) : null}
@@ -435,6 +443,59 @@ function buildDiscoveryNotices(
     });
 
   return notices;
+}
+
+function ScoreReport({ score }: { score: CaseScore }) {
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const earnedItems = score.items.filter((item) => item.earned);
+  const missedItems = score.items.filter((item) => !item.earned);
+
+  return (
+    <div className={styles.scoreReport}>
+      <div className={styles.scoreHeadline}>
+        <strong>{score.percent}%</strong>
+        <div>
+          <h3>{score.rankTitle}</h3>
+          <p>{score.rankText}</p>
+        </div>
+      </div>
+      <p className={styles.scorePoints}>
+        {score.earnedPoints} de {score.maxPoints} pontos — {earnedItems.length}{" "}
+        de {score.items.length} descobertas
+      </p>
+      <button
+        className={styles.button}
+        type="button"
+        onClick={() => setDetailsOpen((open) => !open)}
+      >
+        {detailsOpen ? "Ocultar relatório" : "Ver relatório da investigação"}
+      </button>
+      {detailsOpen ? (
+        <div className={styles.scoreDetails}>
+          <section>
+            <h4>O que você descobriu</h4>
+            {earnedItems.map((item) => (
+              <p key={`${item.kind}-${item.label}`}>
+                <span>+{item.points}</span> {item.label}
+              </p>
+            ))}
+          </section>
+          {missedItems.length ? (
+            <section>
+              <h4>O que ficou na sombra</h4>
+              {missedItems.map((item) => (
+                <p className={styles.scoreMissed} key={`${item.kind}-${item.label}`}>
+                  <span>{item.points}</span>{" "}
+                  {item.kind === "pista" ? "Uma pista" : "Um depoimento"} que
+                  você não encontrou
+                </p>
+              ))}
+            </section>
+          ) : null}
+        </div>
+      ) : null}
+    </div>
+  );
 }
 
 function MindOrganizer({
@@ -570,7 +631,17 @@ function buildRecommendations(state: GameState) {
     !state.dialogueFlags.includes("tiro_depois_trem")
   ) {
     recommendations.push(
-      "O relógio quebrado precisa ser comparado com alguém que ouviu o horário do tiro.",
+      "O relógio quebrado precisa de uma testemunha de ouvido: pergunte a Dona Célia se o tiro veio antes ou depois do último trem.",
+    );
+  }
+
+  if (
+    state.discoveredClues.includes("cofre_vazio") &&
+    (!state.discoveredClues.includes("mala_arrumada") ||
+      !state.discoveredClues.includes("bilhete_ultimo_trem"))
+  ) {
+    recommendations.push(
+      "O cofre vazio aponta para fuga. O quarto de Álvaro guarda a mala e um bilhete que explicam o plano — e abrem conversas novas.",
     );
   }
 
@@ -583,9 +654,46 @@ function buildRecommendations(state: GameState) {
     );
   }
 
+  if (
+    state.talkedCharacters.includes("policial-responsavel") &&
+    !state.dialogueFlags.includes("policial_laudo")
+  ) {
+    recommendations.push(
+      "O policial responsável tem o laudo da perícia. Pergunte pela causa da morte e pela arma do crime.",
+    );
+  }
+
+  if (
+    state.discoveredClues.includes("arma_ausente") &&
+    state.discoveredCharacters.includes("clara-marconi") &&
+    !state.dialogueFlags.includes("clara_confirmou_revolver")
+  ) {
+    recommendations.push(
+      "A arma do crime sumiu. Clara conhecia a casa do irmão: pergunte se Álvaro tinha um revólver.",
+    );
+  }
+
+  if (
+    state.discoveredClues.includes("xicara_borra") &&
+    !state.dialogueFlags.includes("celia_cheiro_cafe")
+  ) {
+    recommendations.push(
+      "A borra grossa na xícara é um preparo raro. Dona Célia conhece os cheiros do prédio: pergunte sobre aquela madrugada.",
+    );
+  }
+
+  if (
+    state.unlockedLocations.includes("apartamento-elias") &&
+    !state.discoveredClues.includes("relogio_irmao")
+  ) {
+    recommendations.push(
+      "A bancada de Elias guarda mais que ferramentas: examine também a gaveta entreaberta.",
+    );
+  }
+
   if (!recommendations.length) {
     recommendations.push(
-      "Você já tem material suficiente para cruzar horários, porta, janela e motivos. Volte ao caderno e escolha as provas decisivas.",
+      "Você já cruzou horários, porta, janela e motivos. Quando sentir que o caso está sólido, use o botão Encerrar caso e aponte um nome.",
     );
   }
 

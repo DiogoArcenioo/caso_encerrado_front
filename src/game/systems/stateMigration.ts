@@ -62,7 +62,10 @@ function repairKnownDestinations(state: GameState): GameState {
   const flags = new Set(state.dialogueFlags);
   let dialogueFlags = state.dialogueFlags;
   let discoveredCharacters = state.discoveredCharacters;
-  let unlockedLocations = state.unlockedLocations;
+  let unlockedLocations = addUnique(
+    state.unlockedLocations,
+    "quarto-vitima",
+  );
 
   if (flags.has("guarda_briefing")) {
     discoveredCharacters = addMany(discoveredCharacters, [

@@ -8,6 +8,7 @@ import {
   SuspectState,
 } from "../types";
 import { getCluePresentation } from "./cluePresentation";
+import { computeCaseScore } from "./scoring";
 
 export function createInitialState(caseData: CaseData): GameState {
   const unlockedLocations = Object.values(caseData.locations)
@@ -39,20 +40,20 @@ export function createInitialState(caseData: CaseData): GameState {
     talkedSuspects: [],
     inspectedHotspots: [],
     selectedEvidence: [],
-    accusationUnlocked: false,
+    accusationUnlocked: true,
     narration:
       "A chuva bate no Edificio Santa Cecilia. Um guarda segura a porta e espera seu primeiro movimento.",
     updatedAt: new Date().toISOString(),
   };
 }
 
-export function startInvestigation(state: GameState, caseData: CaseData) {
+export function startInvestigation(state: GameState) {
   return touch({
     ...state,
     status: "investigating" as const,
     narration:
       "Você sai do carro e fecha o casaco. O Santa Cecília espera do outro lado da chuva.",
-    accusationUnlocked: isAccusationUnlocked(state, caseData),
+    accusationUnlocked: true,
   });
 }
 
@@ -84,10 +85,10 @@ export function visitLocation(
       discoveredClues: addUnique(next.discoveredClues, clue.id),
       narration: `${location.summary}\n\nPista coletada: ${presentation.name}. ${presentation.short}`,
     };
-    next = applyEffect(next, clue.effects);
+    next = applyEffect(next, clue.effects, caseData);
   }
 
-  return finalize(next, caseData);
+  return finalize(next);
 }
 
 export function inspectHotspot(
@@ -101,7 +102,7 @@ export function inspectHotspot(
     narration: hotspot.description,
   };
 
-  next = applyEffect(next, hotspot.effects);
+  next = applyEffect(next, hotspot.effects, caseData);
 
   if (hotspot.clueId && !state.discoveredClues.includes(hotspot.clueId)) {
     const clue = caseData.clues[hotspot.clueId];
@@ -111,10 +112,10 @@ export function inspectHotspot(
       discoveredClues: addUnique(next.discoveredClues, clue.id),
       narration: `${hotspot.description}\n\nPista coletada: ${presentation.name}. ${presentation.short}`,
     };
-    next = applyEffect(next, clue.effects);
+    next = applyEffect(next, clue.effects, caseData);
   }
 
-  return finalize(next, caseData);
+  return finalize(next);
 }
 
 export function chooseDialogue(
@@ -139,13 +140,18 @@ export function chooseDialogue(
       narration: option.response,
     },
     option.effects,
+    caseData,
   );
 
-  return finalize(next, caseData);
+  return finalize(next);
 }
 
 export function canShowHotspot(state: GameState, hotspot: Hotspot): boolean {
-  return meetsRequirements(state, hotspot.requiresClues, hotspot.requiresFlags);
+  return meetsRequirements(
+    state,
+    hotspot.requiresClues,
+    hotspot.clueId ? [] : hotspot.requiresFlags,
+  );
 }
 
 export function canShowDialogue(
@@ -155,33 +161,23 @@ export function canShowDialogue(
   return meetsRequirements(state, option.requiresClues, option.requiresFlags);
 }
 
-export function unlockAccusation(
-  state: GameState,
-  caseData: CaseData,
-): GameState {
-  if (!isAccusationUnlocked(state, caseData)) {
-    return {
-      ...state,
-      narration:
-        "Ainda falta material para sustentar uma acusação. A cidade adora culpados fáceis.",
-    };
-  }
-
+export function openAccusation(state: GameState): GameState {
   return touch({
     ...state,
     status: "accusation",
     accusationUnlocked: true,
     narration:
-      "As peças finalmente rangem no lugar. Agora é possível levar uma acusação ao investigador.",
+      "Hora de apontar um nome. A cidade aceita qualquer culpado — sua consciência, não.",
   });
 }
 
-export function toggleEvidence(state: GameState, clueId: string): GameState {
-  const selectedEvidence = state.selectedEvidence.includes(clueId)
-    ? state.selectedEvidence.filter((id) => id !== clueId)
-    : [...state.selectedEvidence, clueId];
-
-  return touch({ ...state, selectedEvidence });
+export function cancelAccusation(state: GameState): GameState {
+  return touch({
+    ...state,
+    status: "investigating",
+    narration:
+      "Você guarda a acusação no bolso. Ainda há perguntas sem dono nesse prédio.",
+  });
 }
 
 export function accuse(
@@ -189,32 +185,29 @@ export function accuse(
   suspectId: string,
   caseData: CaseData,
 ): GameState {
-  const decisiveCount = state.selectedEvidence.filter((clueId) =>
-    caseData.decisiveEvidence.includes(clueId),
-  ).length;
+  const isCorrect = suspectId === caseData.scoring.culpritId;
   let finalResult: FinalResult;
 
-  if (suspectId === "elias-moretti" && decisiveCount >= 4) {
+  if (isCorrect) {
     finalResult = {
       type: "correto",
-      title: "Caso Encerrado",
-      text:
-        "Elias é preso. Ele não nega completamente. “Engraçado, detetive. Nesta cidade, um homem como Álvaro mata dez pessoas sem puxar um gatilho. Mas quando alguém finalmente derruba um monstro, vocês chamam de assassinato.”\n\nA cidade não ficou mais limpa naquela noite. Só um pouco menos mentirosa.",
-    };
-  } else if (suspectId === "rosa-valente" || suspectId === "helena-duarte") {
-    finalResult = {
-      type: "parcial",
-      title: "Uma verdade torta",
-      text:
-        "A polícia aceita a acusação por enquanto. Rosa ou Helena tinham motivos para mentir, mas a hora do tiro e a escada encenada continuam arranhando sua cabeça.",
+      title: caseData.endings.correct.title,
+      text: caseData.endings.correct.text,
+      score: computeCaseScore(state, caseData),
     };
   } else {
-    finalResult = {
-      type: "errado",
-      title: "O culpado conveniente",
-      text:
-        "Vicente Garza é criminoso o bastante para caber no relatório. A polícia fecha o caso rápido. A verdade, como o último trem, passa sem parar.",
-    };
+    const wrongEnding = caseData.endings.wrong[suspectId];
+    finalResult = wrongEnding
+      ? {
+          type: wrongEnding.type,
+          title: wrongEnding.title,
+          text: wrongEnding.text,
+        }
+      : {
+          type: "errado",
+          title: caseData.endings.wrongDefault.title,
+          text: caseData.endings.wrongDefault.text,
+        };
   }
 
   return touch({
@@ -224,42 +217,21 @@ export function accuse(
     narration: finalResult.text,
     suspectStates: {
       ...state.suspectStates,
-      [suspectId]: finalResult.type === "correto" ? "culpado" : "suspeito",
+      [suspectId]: isCorrect ? "culpado" : "suspeito",
     },
   });
 }
 
-export function isAccusationUnlocked(
+function applyEffect(
   state: GameState,
+  effect: GameEffect | undefined,
   caseData: CaseData,
-): boolean {
-  const relevantClues = state.discoveredClues.filter(
-    (clueId) => caseData.clues[clueId]?.relevance !== "baixa",
-  ).length;
-  const unlockedSuspects = Object.values(state.suspectStates).filter(
-    (status) => status === "pessoa_de_interesse" || status === "suspeito",
-  ).length;
-  const requiredTalks = [
-    "policial-responsavel",
-    "dona-celia",
-    "miguel",
-  ].every((characterId) => state.talkedCharacters.includes(characterId));
-
-  return (
-    relevantClues >= 8 &&
-    unlockedSuspects >= 3 &&
-    state.contradictions.length >= 3 &&
-    requiredTalks &&
-    state.talkedSuspects.length >= 2
-  );
-}
-
-function applyEffect(state: GameState, effect?: GameEffect): GameState {
+): GameState {
   if (!effect) {
     return state;
   }
 
-  return {
+  let next: GameState = {
     ...state,
     unlockedLocations: addMany(state.unlockedLocations, effect.unlockLocations),
     discoveredCharacters: addMany(
@@ -274,6 +246,22 @@ function applyEffect(state: GameState, effect?: GameEffect): GameState {
     },
     narration: effect.narration ?? state.narration,
   };
+
+  for (const clueId of effect.discoverClues ?? []) {
+    const clue = caseData.clues[clueId];
+
+    if (!clue || next.discoveredClues.includes(clueId)) {
+      continue;
+    }
+
+    next = {
+      ...next,
+      discoveredClues: addUnique(next.discoveredClues, clueId),
+    };
+    next = applyEffect(next, clue.effects, caseData);
+  }
+
+  return next;
 }
 
 function mergeSuspectStates(
@@ -300,10 +288,10 @@ function mergeSuspectStates(
   );
 }
 
-function finalize(state: GameState, caseData: CaseData): GameState {
+function finalize(state: GameState): GameState {
   return touch({
     ...state,
-    accusationUnlocked: isAccusationUnlocked(state, caseData),
+    accusationUnlocked: true,
   });
 }
 

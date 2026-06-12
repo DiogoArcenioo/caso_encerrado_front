@@ -108,9 +108,9 @@ export const case01: CaseData = {
           id: "corredor-tapete",
           label: "Tapete",
           x: 48,
-          y: 77,
+          y: 83,
           width: 18,
-          height: 13,
+          height: 26,
           description:
             "Debaixo do tapete há uma chave reserva. Conveniente demais para um prédio cheio de portas trancadas.",
           clueId: "chave_reserva",
@@ -118,10 +118,10 @@ export const case01: CaseData = {
         {
           id: "corredor-fechadura",
           label: "Fechadura",
-          x: 68,
-          y: 26,
-          width: 5,
-          height: 25,
+          x: 71,
+          y: 32,
+          width: 10,
+          height: 10,
           description:
             "A fechadura tem arranhões antigos, mas nada indica arrombamento recente.",
           clueId: "fechadura_arranhoes",
@@ -136,7 +136,6 @@ export const case01: CaseData = {
           description:
             "Uma mancha úmida no assoalho exala perfume doce. Não combina com o cheiro de pólvora do apartamento.",
           clueId: "perfume_corredor",
-          requiresFlags: ["mulher_misteriosa"],
         },
       ],
     },
@@ -217,14 +216,13 @@ export const case01: CaseData = {
         {
           id: "sala-ir-quarto",
           label: "Ir para o quarto",
-          x: 51,
-          y: 17,
+          x: 92,
+          y: 22,
           width: 7,
-          height: 42,
+          height: 68,
           description:
             "O quarto de Álvaro fica além da porta escura. Se ele planejava fugir, alguma coisa deve ter ficado para trás.",
           targetLocationId: "quarto-vitima",
-          requiresClues: ["cofre_vazio"],
         },
         {
           id: "sala-ir-cozinha",
@@ -350,6 +348,7 @@ export const case01: CaseData = {
       id: "quarto-vitima",
       name: "Quarto da vítima",
       image: "/assets/images/locations/quarto-vitima.png",
+      initialUnlocked: true,
       summary:
         "O quarto tem cheiro de pressa. Algumas roupas foram dobradas, outras abandonadas.",
       hotspots: [
@@ -565,6 +564,17 @@ export const case01: CaseData = {
             "O café dele é forte, grosso e deixa a mesma borra encontrada na cozinha de Álvaro.",
           requiresClues: ["xicara_borra"],
         },
+        {
+          id: "elias-gaveta",
+          label: "Gaveta da bancada",
+          x: 43,
+          y: 69,
+          width: 16,
+          height: 14,
+          description:
+            "A gaveta da bancada está entreaberta. Dentro, sobre um pano de flanela, um relógio de bolso com 'T.M.' gravado na tampa — e uma etiqueta de penhor assinada por Álvaro Marconi.",
+          clueId: "relogio_irmao",
+        },
       ],
     },
     "clube-lua-azul": {
@@ -654,7 +664,6 @@ export const case01: CaseData = {
           description:
             "Helena mantém chaves demais para alguém que jura não abrir portas alheias.",
           requiresClues: ["chave_reserva"],
-          requiresFlags: ["celia_citou_helena_chaves"],
         },
       ],
     },
@@ -714,7 +723,8 @@ export const case01: CaseData = {
           width: 14,
           height: 26,
           description:
-            "O arquivo confirma: Vicente é violento, mas matar Álvaro antes de achar o dinheiro não fazia sentido.",
+            "A pasta de Vicente Garza está em cima da pilha: vinte anos de dedos quebrados e nenhum cadáver. Matar Álvaro antes de achar o dinheiro não combina com o método dele.",
+          clueId: "ficha_vicente",
         },
       ],
     },
@@ -796,7 +806,7 @@ export const case01: CaseData = {
       relevance: "alta",
       effects: {
         addFlags: ["cofre_vazio"],
-        unlockLocations: ["quarto-vitima", "cozinha"],
+        unlockLocations: ["cozinha"],
       },
     },
     relogio_quebrado: {
@@ -805,6 +815,13 @@ export const case01: CaseData = {
       short: "A hora da morte pode ter sido encenada.",
       detail:
         "O relógio parou às 23h40, mas o vidro quebrou para fora. Um relojoeiro perceberia a diferença.",
+      textVariants: [
+        {
+          detail:
+            "Dona Célia ouviu o tiro depois do último trem, que passa às 00h02. O relógio marcando 23h40, com o vidro estourado para fora, é uma assinatura: alguém quebrou o ponteiro de propósito para deslocar a hora da morte.",
+          requiresFlags: ["tiro_depois_trem"],
+        },
+      ],
       locationId: "sala-vitima",
       relevance: "decisiva",
       effects: {
@@ -970,6 +987,12 @@ export const case01: CaseData = {
             "Confrontado com a xícara, Elias Moretti reconhece o preparo, mas nega ter levado café ao apartamento.",
           requiresFlags: ["elias_reagiu_cafe"],
         },
+        {
+          short: "O café de Elias estava na cena na hora real do tiro.",
+          detail:
+            "Dona Célia sentiu este café no corredor depois do último trem — a hora real do tiro. A xícara na pia de Álvaro deixa de ser detalhe: é o convite que abriu a porta para o assassino.",
+          requiresFlags: ["elias_reagiu_cafe", "celia_cheiro_cafe"],
+        },
       ],
       locationId: "cozinha",
       relevance: "alta",
@@ -983,6 +1006,13 @@ export const case01: CaseData = {
       short: "A arma foi limpa às pressas.",
       detail:
         "O pano tinha pólvora e água demais. Alguém limpou vestígios sem sair do prédio.",
+      textVariants: [
+        {
+          detail:
+            "A arma desaparecida foi limpa aqui, na cozinha, com a calma de quem conhece a casa. O assassino ficou depois do tiro: tempo de limpar o revólver, encenar a janela e trancar a porta ao sair.",
+          requiresFlags: ["arma_ausente"],
+        },
+      ],
       locationId: "cozinha",
       relevance: "alta",
       effects: {
@@ -1009,6 +1039,75 @@ export const case01: CaseData = {
       effects: {
         addContradictions: [
           "O assassino provavelmente conhecia a rotina do prédio.",
+        ],
+      },
+    },
+    laudo_preliminar: {
+      id: "laudo_preliminar",
+      name: "Laudo preliminar da perícia",
+      short: "Um único tiro de .38 no peito, à queima-roupa, sem luta.",
+      detail:
+        "Disparo único, de contato próximo: pólvora na camisa. Sem hematomas, sem marcas de defesa, nenhum móvel fora do lugar além do teatro da janela. Álvaro não temia a visita. A perícia situa a morte entre 23h e 1h.",
+      textVariants: [
+        {
+          detail:
+            "Disparo único de .38 à queima-roupa, sem sinais de luta: Álvaro deixou o atirador chegar a um passo. Com o relato de Dona Célia, a janela real se estreita: o tiro veio depois das 00h02, quando o último trem passou — e não às 23h40 que o relógio quebrado insiste em contar.",
+          requiresFlags: ["tiro_depois_trem"],
+        },
+      ],
+      locationId: "sala-vitima",
+      relevance: "alta",
+      effects: {
+        addContradictions: [
+          "Sem sinais de luta: Álvaro deixou o atirador se aproximar.",
+        ],
+      },
+    },
+    arma_ausente: {
+      id: "arma_ausente",
+      name: "Arma do crime desaparecida",
+      short: "Nenhum revólver na cena. O assassino levou a arma.",
+      detail:
+        "Calibre .38 e nenhuma cápsula deflagrada: revólver. A cena foi montada para parecer execução, mas executor profissional abandona a arma no rio — não a leva para casa como lembrança.",
+      textVariants: [
+        {
+          short: "O .38 desaparecido era do próprio Álvaro.",
+          detail:
+            "Clara confirma: Álvaro mantinha um revólver .38 de cabo claro sempre ao alcance da mão. O assassino não trouxe arma — usou a da vítima e saiu com ela. Isso exige proximidade, confiança e um sangue-frio que não combina com briga de ocasião.",
+          requiresFlags: ["clara_confirmou_revolver"],
+        },
+      ],
+      locationId: "sala-vitima",
+      relevance: "decisiva",
+      effects: {
+        addFlags: ["arma_ausente"],
+      },
+    },
+    ficha_vicente: {
+      id: "ficha_vicente",
+      name: "Ficha criminal de Vicente Garza",
+      short: "Violento, metódico — e nunca cobrou defunto.",
+      detail:
+        "Agressões, extorsão, intimidação. Nenhum homicídio em vinte anos de ficha. O método de Vicente é quebrar dedos até receber. Matar Álvaro antes de encontrar o dinheiro contraria tudo o que ele é.",
+      locationId: "sala-policial",
+      relevance: "media",
+      effects: {
+        addFlags: ["ficha_vicente"],
+      },
+    },
+    relogio_irmao: {
+      id: "relogio_irmao",
+      name: "Relógio de bolso penhorado",
+      short: "O relógio do irmão de Elias, com etiqueta de penhor de Álvaro.",
+      detail:
+        "Um relógio de bolso antigo com 'T.M.' gravado na tampa e uma etiqueta amarrada ao aro: 'Garantia — A. Marconi'. Este relógio estava no cofre de Álvaro. Agora está na gaveta da bancada de Elias.",
+      locationId: "apartamento-elias",
+      relevance: "decisiva",
+      effects: {
+        addFlags: ["relogio_irmao_encontrado"],
+        suspectStates: { "elias-moretti": "suspeito" },
+        addContradictions: [
+          "O conteúdo do cofre de Álvaro terminou na gaveta de Elias.",
         ],
       },
     },
@@ -1063,6 +1162,18 @@ export const case01: CaseData = {
             addFlags: ["guarda_listou_testemunhas", "guarda_listou_tiro"],
           },
         },
+        {
+          id: "guarda_corpo",
+          text: "Quem encontrou o corpo?",
+          response:
+            "Ninguém encontrou — a porta estava trancada. Dona Célia, do 32, ouviu o estampido e ligou para a delegacia. Quando chegamos, a senhoria desceu com o molho de chaves dela e abriu o 31 para a gente. Helena Duarte. Mulher que abre qualquer porta deste prédio sem pedir licença duas vezes.",
+          requiresFlags: ["guarda_briefing"],
+          effects: {
+            discoverCharacters: ["helena-duarte"],
+            unlockLocations: ["recepcao-predio"],
+            addFlags: ["helena_tem_chave_mestra", "celia_ligou_policia"],
+          },
+        },
       ],
     },
     "policial-responsavel": {
@@ -1073,7 +1184,7 @@ export const case01: CaseData = {
         "Sobretudo molhado, cansaço nos olhos e pressa de fechar o caso como execução de gangue.",
       image: "/assets/images/characters/policial-responsavel.png",
       locationId: "sala-vitima",
-      scenePosition: { x: 50, y: 20, width: 18.5, flipX: false },
+      scenePosition: { x: 60, y: 20, width: 18.5, flipX: false },
       dialogues: [
         {
           id: "policial-basico",
@@ -1083,6 +1194,28 @@ export const case01: CaseData = {
           effects: {
             discoverCharacters: ["alvaro-marconi"],
             addFlags: ["policial_basico"],
+          },
+        },
+        {
+          id: "policial-laudo",
+          text: "O que a perícia diz sobre a causa da morte?",
+          response:
+            "Um único disparo no peito, de perto — tem pólvora na camisa. Calibre .38, nenhuma cápsula na cena: revólver. E nenhum sinal de luta. Nada quebrado, nada derrubado, além do teatro da janela. A perícia coloca a morte entre 23h e 1h. O Bigode deixou o assassino chegar a um passo, detetive. Ou conhecia, ou devia, ou confiava.",
+          requiresFlags: ["policial_basico"],
+          effects: {
+            discoverClues: ["laudo_preliminar"],
+            addFlags: ["policial_laudo"],
+          },
+        },
+        {
+          id: "policial-arma",
+          text: "E a arma do crime? Onde está?",
+          response:
+            "Essa é a parte que estraga o meu relatório: não está. Reviramos cada gaveta — nada de revólver. Execução de gangue joga a arma no rio antes de dobrar a esquina, não sai carregando lembrança da cena. Quem atirou levou a arma embora. Ou veio armado e é colecionador... ou usou uma arma que já estava lá dentro.",
+          requiresFlags: ["policial_laudo"],
+          effects: {
+            discoverClues: ["arma_ausente"],
+            addFlags: ["policial_arma"],
           },
         },
         {
@@ -1136,6 +1269,34 @@ export const case01: CaseData = {
             addFlags: ["policial_duvida_janela"],
           },
         },
+        {
+          id: "policial-hora-falsa",
+          text: "O relógio foi forjado: o tiro veio depois do último trem.",
+          response:
+            "Se a vizinha ouviu o trem antes do estampido, o 23h40 daquele relógio é mentira de vidro quebrado. E mentira tem endereço, detetive: às 23h40, o carro do Garza rondava a esquina à vista de todo mundo. Alguém quebrou aquele ponteiro para entregar o Vicente de bandeja. Quem arma uma moldura dessas conhece o prédio, conhece a vizinhança... e entende de relógios.",
+          requiresClues: ["relogio_quebrado"],
+          requiresFlags: ["tiro_depois_trem"],
+          effects: {
+            addContradictions: [
+              "A hora falsa do relógio foi escolhida para incriminar Vicente.",
+            ],
+            addFlags: ["policial_aceitou_hora_falsa"],
+          },
+        },
+        {
+          id: "policial-arma-propria",
+          text: "O .38 que sumiu era do próprio Álvaro.",
+          response:
+            "Da vítima? Então quem atirou não veio armado para matar. Veio conversar, viu a chance e usou o ferro do Bigode contra o dono. Isso não é execução, detetive. Isso é acerto de contas pessoal — e o relatório do delegado acaba de envelhecer dez anos em dez segundos.",
+          requiresClues: ["arma_ausente"],
+          requiresFlags: ["clara_confirmou_revolver"],
+          effects: {
+            addContradictions: [
+              "O assassino matou Álvaro com a arma da própria vítima.",
+            ],
+            addFlags: ["policial_arma_propria"],
+          },
+        },
       ],
     },
     "dona-celia": {
@@ -1146,7 +1307,7 @@ export const case01: CaseData = {
         "Uma senhora de robe escuro e olhos atentos. Ela finge fragilidade, mas ouve como profissional.",
       image: "/assets/images/characters/dona-celia.png",
       locationId: "apartamento-dona-celia",
-      scenePosition: { x: 20, y: 12, width: 22 },
+      scenePosition: { x: 10, y: 12, width: 22 },
       dialogues: [
         {
           id: "celia-mulher",
@@ -1159,11 +1320,21 @@ export const case01: CaseData = {
           },
         },
         {
+          id: "celia-discussao",
+          text: "O que exatamente a senhora ouviu nessa discussão?",
+          response:
+            "A mulher disse: 'Você vendeu até o que era meu'. Depois um copo bateu na mesa e o salto foi embora bravo. E olhe, era uma voz bonita. De palco, sabe? Mesmo brigando, ela projetava — a gente que ouve rádio a vida inteira reconhece voz ensaiada.",
+          requiresFlags: ["mulher_misteriosa"],
+          effects: {
+            addFlags: ["celia_ouviu_cartas", "celia_voz_palco"],
+          },
+        },
+        {
           id: "celia-trem",
           text: "A senhora ouviu o tiro antes ou depois do trem?",
           response:
             "Depois. O trem passou fazendo aquele berro nos trilhos. Só então veio o estampido. Por isso esse relógio das 23h40 me incomoda.",
-          requiresClues: ["relogio_quebrado", "bilhete_ultimo_trem"],
+          requiresClues: ["relogio_quebrado"],
           effects: {
             addContradictions: [
               "O tiro foi ouvido depois do trem, mas o relógio marca antes.",
@@ -1208,6 +1379,34 @@ export const case01: CaseData = {
             unlockLocations: ["recepcao-predio"],
             suspectStates: { "helena-duarte": "pessoa_de_interesse" },
             addFlags: ["celia_citou_helena_chaves"],
+          },
+        },
+        {
+          id: "celia-cafe",
+          text: "A senhora sentiu cheiro de café naquela madrugada?",
+          response:
+            "Senti, sim, e até achei bonito: café forte no corredor, depois do trem passar. Pensei comigo: 'O Elias está varando a noite de novo'. O café dele é famoso no prédio — sobe pela escada como visita educada. ...Espere. Por que essa pergunta, detetive?",
+          requiresClues: ["xicara_borra"],
+          effects: {
+            discoverCharacters: ["elias-moretti"],
+            suspectStates: { "elias-moretti": "pessoa_de_interesse" },
+            addContradictions: [
+              "Cheiro do café de Elias no corredor depois do último trem.",
+            ],
+            addFlags: ["celia_cheiro_cafe"],
+          },
+        },
+        {
+          id: "celia-helena-hora",
+          text: "A senhora ouviu Helena no 31 naquela noite?",
+          response:
+            "Ouvi a voz dela, seca como recibo. Foi bem antes do trem — onze e pouco. Desceu batendo aquele salto baixo de quem cobra aluguel. Depois disso, o 31 ficou em silêncio um bom tempo.",
+          requiresFlags: ["helena_admitiu_subida"],
+          effects: {
+            addContradictions: [
+              "Helena saiu antes do último trem; o tiro veio depois.",
+            ],
+            addFlags: ["celia_confirma_helena_antes"],
           },
         },
       ],
@@ -1264,6 +1463,32 @@ export const case01: CaseData = {
             addFlags: ["miguel_vulto_posado"],
           },
         },
+        {
+          id: "miguel-hora-vulto",
+          text: "A que horas você viu esse vulto?",
+          response:
+            "Depois do último trem. Lembro porque o barulho dos trilhos ainda estava no ar quando a janela abriu. O vulto apareceu, mexeu em alguma coisa e sumiu... para dentro. Para DENTRO, agora que o senhor pergunta.",
+          requiresFlags: ["vulto_escada"],
+          effects: {
+            addContradictions: [
+              "A janela foi aberta depois do trem — e o vulto voltou para dentro.",
+            ],
+            addFlags: ["miguel_vulto_depois_trem"],
+          },
+        },
+        {
+          id: "miguel-carro-detalhe",
+          text: "Esse carro escuro: quando ele foi embora?",
+          response:
+            "Foi embora não, senhor. Ficou. Motor ligado a noite quase toda, parado feito cobrador paciente. Quando a sirene apontou na esquina, aí sim ele deslizou para longe, devagar. Quem mata alguém não fica de camarote esperando a polícia chegar, fica?",
+          requiresFlags: ["miguel_viu_carro"],
+          effects: {
+            addContradictions: [
+              "O carro escuro ficou na rua até a polícia chegar.",
+            ],
+            addFlags: ["miguel_carro_ficou"],
+          },
+        },
       ],
     },
     "clara-marconi": {
@@ -1305,10 +1530,39 @@ export const case01: CaseData = {
           id: "clara-trem",
           text: "Por que o último trem importava?",
           response:
-            "Ele marcou de fugir depois do último trem porque a rua ficava vazia e a estação engolia nomes. Mas Álvaro nunca conseguiu sair de si mesmo.",
+            "Ele ia encontrar um homem na estação, depois do último trem, quando a rua fica vazia e a estação engole nomes. A chave do bilhete era de um armário — documentos novos, vida nova. Álvaro ia virar outro homem em outra cidade. Só não contou que a morte também pega trem.",
           requiresClues: ["bilhete_ultimo_trem"],
           effects: {
             addFlags: ["clara_falou_trem"],
+          },
+        },
+        {
+          id: "clara-ultima-vez",
+          text: "Quando você o viu pela última vez?",
+          response:
+            "Domingo. Ele trouxe pão doce, como quando éramos crianças, e ficou espiando a rua pela cortina. Antes de sair, disse: 'Clara, se alguém perguntar, você não tem irmão'. Eu devia ter entendido que aquilo era despedida.",
+          effects: {
+            addFlags: ["clara_ultima_visita"],
+          },
+        },
+        {
+          id: "clara-arma",
+          text: "Álvaro tinha uma arma em casa?",
+          response:
+            "Um revólver .38 de cabo claro. Herança torta do nosso pai. Dormia com ele na mesa de cabeceira e, nos últimos tempos, andava com ele pela casa. Se vocês não acharam o revólver... então ele morreu pela própria arma, não foi? Deus do céu.",
+          requiresClues: ["arma_ausente"],
+          effects: {
+            addFlags: ["clara_confirmou_revolver"],
+          },
+        },
+        {
+          id: "clara-rosa",
+          text: "O que existia entre Álvaro e Rosa Valente?",
+          response:
+            "Ele a amava do jeito errado: como posse. Comprou cartas antigas dela — cartas comprometedoras — só para mantê-la por perto. Rosa cantava no Lua Azul e meu irmão sentava na mesma mesa toda sexta, como um credor apaixonado. Mulher nenhuma perdoa virar garantia, detetive.",
+          requiresFlags: ["clara_revelou_vicente_rosa"],
+          effects: {
+            addFlags: ["clara_sobre_rosa"],
           },
         },
       ],
@@ -1376,6 +1630,29 @@ export const case01: CaseData = {
             addFlags: ["rosa_nega_importado"],
           },
         },
+        {
+          id: "rosa-celia-confronto",
+          text: "Uma vizinha ouviu você gritar: 'Você vendeu até o que era meu'.",
+          response:
+            "A velha do 32 tem ouvido de microfone... Sim, gritei isso. Descobri que Álvaro tinha mostrado minhas cartas ao Garza — como amostra, entende? Mercadoria na vitrine. Quebrei um copo, chamei Álvaro do que ele merecia e desci antes das dez e meia. A raiva, detetive, eu gastei toda no palco.",
+          requiresFlags: ["celia_ouviu_cartas", "rosa_admitiu_visita"],
+          effects: {
+            addFlags: ["rosa_cartas_vicente", "rosa_explicou_briga"],
+          },
+        },
+        {
+          id: "rosa-alibi",
+          text: "Onde você estava na hora do tiro?",
+          response:
+            "No palco do Lua Azul. Segundo set, das onze à uma da manhã. Cinquenta pares de olhos e um refletor inteiro de testemunha — pergunte ao maître, pergunte à banda. Eu estava cantando 'Last Train Blues'. A ironia eu só percebi no dia seguinte.",
+          requiresFlags: ["rosa_admitiu_visita"],
+          effects: {
+            addContradictions: [
+              "Rosa afirma ter estado no palco do Lua Azul das 23h à 1h.",
+            ],
+            addFlags: ["rosa_alibi_palco"],
+          },
+        },
       ],
     },
     "vicente-garza": {
@@ -1387,9 +1664,9 @@ export const case01: CaseData = {
       image: "/assets/images/characters/vicente-garza.png",
       locationId: "sala-policial",
       scenePosition: {
-        x: 70,
-        y: 25,
-        width: 11.5,
+        x: 48,
+        y: 17,
+        width: 21.5,
         flipX: true,
         clipBottom: 28,
       },
@@ -1435,6 +1712,43 @@ export const case01: CaseData = {
             addFlags: ["vicente_definiu_rosa"],
           },
         },
+        {
+          id: "vicente-carro-confronto",
+          text: "Uma testemunha viu seu carro na esquina, antes e depois do tiro.",
+          response:
+            "Olho bom. Era o meu carro. Eu esperava o Bigode sair com a mala e o dinheiro — o plano era simples: ele sai, eu cobro na calçada, ninguém morre. Fiquei até a sirene chegar e fui embora devagar, porque correr de polícia é confissão. Agora me responda, detetive: quem espera a noite inteira na chuva para cobrar um morto?",
+          requiresFlags: ["miguel_viu_carro", "vicente_admitiu_predio"],
+          effects: {
+            addContradictions: [
+              "Vicente vigiava a saída do prédio esperando Álvaro fugir com o dinheiro.",
+            ],
+            addFlags: ["vicente_admitiu_carro"],
+          },
+        },
+        {
+          id: "vicente-vulto",
+          text: "Da esquina, você enxergava a janela do terceiro andar?",
+          response:
+            "Enxergava, e vi. A janela abriu depois do trem passar. Um vulto apareceu, ajeitou alguma coisa na grade e voltou para dentro. Ninguém desceu por aquela escada. Eu estava olhando — era o meu dinheiro descendo, se alguém descesse. Anote no seu caderninho: NINGUÉM desceu.",
+          requiresFlags: ["vicente_admitiu_carro", "vulto_escada"],
+          effects: {
+            addContradictions: [
+              "Vicente confirma: a janela abriu depois do trem e ninguém desceu pela escada.",
+            ],
+            addFlags: ["vicente_ninguem_desceu"],
+          },
+        },
+        {
+          id: "vicente-importado-confronto",
+          text: "Seu cigarro importado estava no cinzeiro do morto.",
+          response:
+            "Subi na terça, com hora marcada e recado do patrão. Fumei dois, ouvi promessa de pagamento e desci sem encostar num fio de bigode. O Bigode não lavava xícara nem caráter — aquele cinzeiro tem arqueologia de um mês. Cigarro velho não é álibi de ninguém, detetive. Nem culpa minha.",
+          requiresClues: ["cigarro_importado"],
+          requiresFlags: ["vicente_admitiu_predio"],
+          effects: {
+            addFlags: ["vicente_explicou_importado"],
+          },
+        },
       ],
     },
     "helena-duarte": {
@@ -1446,9 +1760,9 @@ export const case01: CaseData = {
       image: "/assets/images/characters/helena-duarte.png",
       locationId: "recepcao-predio",
       scenePosition: {
-        x: 54,
-        y: 25,
-        width: 10.5,
+        x: 58,
+        y: 20,
+        width: 16.5,
         flipX: true,
         clipBottom: 20,
       },
@@ -1494,6 +1808,58 @@ export const case01: CaseData = {
             addFlags: ["helena_viu_elias_subir"],
           },
         },
+        {
+          id: "helena-mestra",
+          text: "Foi a senhora que abriu o 31 para a polícia.",
+          response:
+            "Abri. Sou a senhoria, tenho cópia de tudo — menos de paciência. E vou lhe dizer o que o delegado não quis ouvir: a porta estava presa pela tranca simples, não pelo trinco interno. Sabe o que isso significa? Que foi trancada por FORA, detetive.",
+          requiresFlags: ["helena_tem_chave_mestra"],
+          effects: {
+            addContradictions: [
+              "Helena: a porta foi trancada por fora, não pelo trinco interno.",
+            ],
+            addFlags: ["helena_abriu_policia", "helena_tranca_fora"],
+          },
+        },
+        {
+          id: "helena-hora",
+          text: "A que horas a senhora saiu do apartamento dele?",
+          response:
+            "Onze e cinco, onze e dez. O último trem ainda não tinha passado — eu o ouvi já do meu quarto, com as contas na mesa e a raiva no fogão. Pergunte à Célia, se duvida. Aquela mulher ouve até pensamento.",
+          requiresFlags: ["helena_admitiu_subida"],
+          effects: {
+            addFlags: ["helena_saiu_antes_trem"],
+          },
+        },
+        {
+          id: "helena-cofre",
+          text: "O cofre atrás do quadro estava vazio.",
+          response:
+            "Então levaram tudo: o dinheiro e os meus recibos. Quando saí, o quadro estava no lugar e Álvaro vivo, debochando de mim. Quem abriu aquele cofre sabia que ele existia — e neste prédio, detetive, segredo de parede dura menos que pintura barata.",
+          requiresClues: ["cofre_vazio"],
+          requiresFlags: ["helena_admitiu_subida"],
+          effects: {
+            addContradictions: [
+              "Os papéis de chantagem sumiram junto com o dinheiro do cofre.",
+            ],
+            addFlags: ["helena_recibos_sumidos"],
+          },
+        },
+        {
+          id: "helena-cafe",
+          text: "Quem no prédio entraria no 31 sem Álvaro desconfiar?",
+          response:
+            "Álvaro não abria a porta nem para a sorte. Mas tinha uma exceção, agora que pergunta: o café do Elias. O relojoeiro tem essa mania gentil de subir com bule e xícara quando alguém vara a noite. Gentileza, neste prédio, é a chave que nenhuma fechadura recusa.",
+          requiresFlags: ["cafe_elias"],
+          effects: {
+            discoverCharacters: ["elias-moretti"],
+            suspectStates: { "elias-moretti": "pessoa_de_interesse" },
+            addContradictions: [
+              "Álvaro só abriria a porta, àquela hora, para o café de Elias.",
+            ],
+            addFlags: ["helena_cafe_abre_portas"],
+          },
+        },
       ],
     },
     "elias-moretti": {
@@ -1505,9 +1871,9 @@ export const case01: CaseData = {
       image: "/assets/images/characters/elias-moretti.png",
       locationId: "apartamento-elias",
       scenePosition: {
-        x: 67,
-        y: 25,
-        width: 11,
+        x: 56,
+        y: 2,
+        width: 25,
         flipX: true,
         clipBottom: 39,
       },
@@ -1566,6 +1932,42 @@ export const case01: CaseData = {
             addFlags: ["elias_admitiu_relogio_pode_mentir"],
           },
         },
+        {
+          id: "elias-celia-cafe",
+          text: "Seu café foi sentido no terceiro andar depois do trem.",
+          response:
+            "Cheiro sobe, detetive. Tubulação velha, prédio antigo. Eu fazia café aqui embaixo, como toda noite... — pela primeira vez, a mão dele procura a bancada antes da resposta. — Dona Célia é uma boa mulher. Mas perfume e café, no escuro, moram na mesma rua da imaginação.",
+          requiresFlags: ["celia_cheiro_cafe", "elias_reagiu_cafe"],
+          effects: {
+            suspectStates: { "elias-moretti": "suspeito" },
+            addFlags: ["elias_abalado_cafe"],
+          },
+        },
+        {
+          id: "elias-arma",
+          text: "A arma que matou Álvaro era dele mesmo. E sumiu.",
+          response:
+            "Que poético. Um homem que viveu apontando dívidas, morto pela própria arma. Quase um relógio acertando sozinho... Se procura o revólver, procure no rio. É onde esta cidade guarda tudo o que não quer explicar.",
+          requiresClues: ["arma_ausente"],
+          requiresFlags: ["clara_confirmou_revolver"],
+          effects: {
+            addFlags: ["elias_ironizou_arma"],
+          },
+        },
+        {
+          id: "elias-relogio-irmao",
+          text: "Encontrei o relógio do seu irmão na sua gaveta. Com a etiqueta de penhor de Álvaro.",
+          response:
+            "...Tomás vendeu o relógio do nosso pai para cobrir a última aposta. Álvaro o pendurou dentro do cofre como troféu, junto com os papéis de todo mundo. Eu apenas recuperei o que era da minha família. — Ele fecha a gaveta com o cuidado de quem fecha um caixão. — O resto, detetive, é a história que você escolher contar. Só peço que conte direito: monstros também morrem de visita educada.",
+          requiresClues: ["relogio_irmao"],
+          effects: {
+            suspectStates: { "elias-moretti": "suspeito" },
+            addContradictions: [
+              "Elias admite ter recuperado o relógio que estava no cofre de Álvaro.",
+            ],
+            addFlags: ["elias_quase_confessou"],
+          },
+        },
       ],
     },
     "alvaro-marconi": {
@@ -1576,6 +1978,7 @@ export const case01: CaseData = {
         "Cobrador de dívidas. Vivo, era ameaça. Morto, virou mapa.",
       image: "/assets/images/characters/alvaro-marconi.png",
       locationId: "sala-vitima",
+      accusable: false,
       dialogues: [],
     },
     "mulher-misteriosa": {
@@ -1586,6 +1989,7 @@ export const case01: CaseData = {
         "Uma voz feminina, salto alto, perfume doce e rastros que levam ao Clube Lua Azul.",
       image: "/assets/images/characters/rosa-valente.png",
       locationId: "clube-lua-azul",
+      accusable: false,
       dialogues: [],
     },
   },
@@ -1595,12 +1999,139 @@ export const case01: CaseData = {
     { characterId: "helena-duarte", label: "Helena Duarte" },
     { characterId: "elias-moretti", label: "Elias Moretti" },
   ],
-  decisiveEvidence: [
-    "relogio_quebrado",
-    "ferrugem_intacta",
-    "lama_artificial",
-    "chave_reserva",
-    "xicara_borra",
-    "profissao_elias",
-  ],
+  scoring: {
+    culpritId: "elias-moretti",
+    cluePoints: {
+      baixa: 1,
+      media: 3,
+      alta: 6,
+      decisiva: 10,
+    },
+    testimonies: [
+      {
+        flag: "tiro_depois_trem",
+        label: "Dona Célia: o tiro veio depois do último trem",
+        points: 12,
+      },
+      {
+        flag: "celia_cheiro_cafe",
+        label: "Dona Célia: cheiro de café no corredor na hora real do tiro",
+        points: 10,
+      },
+      {
+        flag: "historia_irmao_elias",
+        label: "Dona Célia: a história do irmão de Elias",
+        points: 8,
+      },
+      {
+        flag: "clara_confirmou_revolver",
+        label: "Clara: Álvaro tinha um revólver .38 de cabo claro",
+        points: 10,
+      },
+      {
+        flag: "clara_revelou_vicente_rosa",
+        label: "Clara: a ligação de Vicente e Rosa com Álvaro",
+        points: 6,
+      },
+      {
+        flag: "rosa_admitiu_visita",
+        label: "Rosa admitiu a visita na noite do crime",
+        points: 8,
+      },
+      {
+        flag: "vicente_ninguem_desceu",
+        label: "Vicente: ninguém desceu pela escada de incêndio",
+        points: 6,
+      },
+      {
+        flag: "helena_viu_elias_subir",
+        label: "Helena viu Elias subir naquela noite",
+        points: 10,
+      },
+      {
+        flag: "miguel_vulto_depois_trem",
+        label: "Miguel: o vulto apareceu depois do trem",
+        points: 8,
+      },
+      {
+        flag: "motivo_elias",
+        label: "Elias confrontado com o motivo do irmão",
+        points: 10,
+      },
+      {
+        flag: "elias_reagiu_cafe",
+        label: "Elias reconheceu o próprio café",
+        points: 8,
+      },
+      {
+        flag: "elias_quase_confessou",
+        label: "Elias quase confessou diante do relógio do irmão",
+        points: 15,
+      },
+    ],
+    ranks: [
+      {
+        minPercent: 100,
+        title: "Caso perfeito",
+        text:
+          "Você reconstruiu a noite inteira: hora real do tiro, a encenação da janela, o café, a chave e o motivo. Nenhuma sombra ficou sem nome. O delegado não encontra uma vírgula para contestar.",
+      },
+      {
+        minPercent: 85,
+        title: "Investigação brilhante",
+        text:
+          "Um caso quase à prova de advogado. Pouca coisa escapou ao seu caderno — o suficiente para o júri, não para o seu orgulho.",
+      },
+      {
+        minPercent: 65,
+        title: "Caso sólido",
+        text:
+          "Você acertou o nome e sustentou o essencial. Mas partes da noite continuam no escuro, e o escuro tem memória.",
+      },
+      {
+        minPercent: 40,
+        title: "Caso com lacunas",
+        text:
+          "O culpado certo, por um fio. Metade da história ficou no prédio. Um bom advogado faria chover dúvida nesse relatório.",
+      },
+      {
+        minPercent: 0,
+        title: "Palpite de sorte",
+        text:
+          "Você apontou o dedo certo quase sem provas. A cidade aceita, mas você sabe: dessa vez, foi o instinto que pagou a conta.",
+      },
+    ],
+  },
+  endings: {
+    correct: {
+      title: "Caso Encerrado",
+      text:
+        "Elias é preso sem resistir. No fundo falso do armário, a polícia encontra o dinheiro do cofre intacto e um revólver .38 de cabo claro embrulhado em flanela — a arma do próprio Álvaro.\n\n“Engraçado, detetive. Nesta cidade, um homem como Álvaro mata dez pessoas sem puxar um gatilho. Mas quando alguém finalmente derruba um monstro, vocês chamam de assassinato.”\n\nA cidade não ficou mais limpa naquela noite. Só um pouco menos mentirosa.",
+    },
+    wrong: {
+      "rosa-valente": {
+        type: "parcial",
+        title: "Uma verdade torta",
+        text:
+          "Rosa tinha motivo, cartas e uma visita mal explicada. A polícia aceita por enquanto. Mas a hora do tiro e a escada encenada continuam arranhando sua cabeça — e em algum lugar do prédio, um relojoeiro respira aliviado.",
+      },
+      "helena-duarte": {
+        type: "parcial",
+        title: "Uma verdade torta",
+        text:
+          "Helena tinha a chave mestra e segredos demais. A polícia aceita a acusação por enquanto. Mas a hora do tiro e a escada encenada continuam arranhando sua cabeça — e em algum lugar do prédio, um relojoeiro respira aliviado.",
+      },
+      "vicente-garza": {
+        type: "errado",
+        title: "O culpado conveniente",
+        text:
+          "Vicente Garza é criminoso o bastante para caber no relatório. A polícia fecha o caso rápido. A verdade, como o último trem, passa sem parar.",
+      },
+    },
+    wrongDefault: {
+      title: "O nome errado",
+      text:
+        "A acusação não para em pé nem até a delegacia. O verdadeiro assassino assiste o caso esfriar pela janela, com um café forte entre as mãos. A cidade arquiva — você, não.",
+    },
+  },
 };
